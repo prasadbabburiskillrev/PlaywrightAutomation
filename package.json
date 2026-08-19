@@ -1,0 +1,34 @@
+{
+  "name": "playwrightautomation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "screenshots:xlDesktop": "tsx src/screenshots/runner/run-all.ts --device=xlDesktop",
+    "screenshots:lDesktop": "tsx src/screenshots/runner/run-all.ts --device=lDesktop",
+    "screenshots:desktop": "tsx src/screenshots/runner/run-all.ts --device=Desktop",
+    "screenshots:lTablet": "tsx src/screenshots/runner/run-all.ts --device=lTablet",
+    "screenshots:pTablet": "tsx src/screenshots/runner/run-all.ts --device=pTablet",
+    "screenshots:xsMobile": "tsx src/screenshots/runner/run-all.ts --device=xsMobile",
+    "screenshots:all": "tsx src/screenshots/runner/run-all-resolutions.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.1.2",
+    "dotenv": "^17.4.2",
+    "pdf-lib": "^1.17.1",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "playwright": "^1.62.1"
+  }
+}

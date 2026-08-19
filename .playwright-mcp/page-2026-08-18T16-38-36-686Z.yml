@@ -1,0 +1,85 @@
+- generic [ref=f1e90]:
+  - img "Apotex Favicon" [ref=f1e239] [cursor=pointer]
+  - main [ref=f1e92]:
+    - generic [ref=f1e97]:
+      - generic [ref=f1e99]:
+        - generic [ref=f1e100]: Enroll in Copay Assistance
+        - generic [ref=f1e101]:
+          - generic [ref=f1e102] [cursor=pointer]: Eligibility
+          - generic [ref=f1e108] [cursor=pointer]: Patient Information
+          - generic [ref=f1e115]: Patient Consent
+          - generic [ref=f1e122]: Success
+      - generic [ref=f1e548]:
+        - generic [ref=f1e549]:
+          - heading "Patient Consent" [level=2] [ref=f1e551]
+          - generic [ref=f1e553]:
+            - generic [ref=f1e612]:
+              - img "error-icon" [ref=f1e613]
+              - generic [ref=f1e614]: There are 2 errors
+            - generic [ref=f1e554]:
+              - list [ref=f1e555]:
+                - listitem [ref=f1e556]: Limitations apply.
+                - listitem [ref=f1e557]: Valid only for those with private commercial insurance.
+                - listitem [ref=f1e558]: Prescription must be for an approved indication. Eligibility is determined by Apotex and/or its program administrator based on the FDA-approved labeling.
+                - listitem [ref=f1e559]: Restrictions, including monthly and/or annual maximums, may apply.
+                - listitem [ref=f1e560]: Patient is responsible for any costs once program limit is reached.
+                - listitem [ref=f1e561]:
+                  - text: Program not valid (i) if prescription for EVDI
+                  - superscript [ref=f1e562]: ™
+                  - text: (trabectedin) Injection is paid, in whole or in part, under Medicare (including Part D, even in the coverage gap), Medicaid, Medigap, TRICARE, VA, DoD, or any other federal or state health care program, (ii) where patient is not using insurance coverage at all, (iii) where the patient's insurance plan reimburses for the entire cost of the drug, or (iv) where product is not covered by patient's insurance.
+                - listitem [ref=f1e563]: The value of this program is exclusively for the benefit of patients and is intended to be credited towards patient out-of-pocket obligations and maximums, including applicable co-payments, coinsurance, and deductibles.
+                - listitem [ref=f1e564]: It is a violation of the terms and conditions of this program to use it to enroll patients for the purposes of a copay accumulator or maximizer program.
+                - listitem [ref=f1e565]: Apotex reserves the right to take any appropriate action against any person or entity using the program in violation of the terms and conditions.
+                - listitem [ref=f1e566]: Offer not available to residents of California or Massachusetts or where prohibited by law.
+                - listitem [ref=f1e567]: Patient may not seek reimbursement for the value received from this program from other parties, including any health insurance program or plan, flexible spending account, or health care savings account.
+                - listitem [ref=f1e568]: Patient is responsible for complying with any applicable limitations and requirements of their health plan related to the use of the Program.
+                - listitem [ref=f1e569]: Valid only in the United States and US Territories (Puerto Rico, Guam, Northern Mariana Islands, and Virgin Islands).
+                - listitem [ref=f1e570]: This Program is not health insurance.
+                - listitem [ref=f1e571]: Program may not be combined with any third-party rebate, coupon, or offer.
+                - listitem [ref=f1e572]: Proof of purchase may be required.
+                - listitem [ref=f1e573]: Co-pay program has no cash value.
+                - listitem [ref=f1e574]: Additional terms and conditions may apply.
+                - listitem [ref=f1e575]: Apotex reserves the right to rescind, revoke, or amend the Program and discontinue support at any time without notice.
+              - paragraph [ref=f1e576]: "*Indicates a required field."
+              - generic [ref=f1e578]:
+                - generic [ref=f1e581]:
+                  - generic [ref=f1e582]:
+                    - checkbox "*I have read and agree to the Terms and Conditions for participation in the Copay Assistance Program." [ref=f1e585] [cursor=pointer]
+                    - generic [ref=f1e586] [cursor=pointer]
+                  - generic [ref=f1e587] [cursor=pointer]: "*I have read and agree to the Terms and Conditions for participation in the Copay Assistance Program."
+                - generic [ref=f1e615]:
+                  - img "error-icon" [ref=f1e616]
+                  - generic [ref=f1e617]: Required
+            - generic [ref=f1e592]:
+              - generic [ref=f1e593]:
+                - generic [ref=f1e594]: Patient/Patient Representative Signature*
+                - generic [ref=f1e597]:
+                  - group
+                  - textbox [ref=f1e599]
+                - generic [ref=f1e618]:
+                  - img "warning" [ref=f1e619]
+                  - paragraph [ref=f1e620]: Required
+              - generic [ref=f1e600]:
+                - text: Today’s Date*
+                - generic [ref=f1e603]:
+                  - group
+                  - textbox [ref=f1e605]: 08/18/2026
+                - paragraph [ref=f1e606]: MM/DD/YYYY
+        - generic [ref=f1e607]:
+          - button "Back" [ref=f1e608] [cursor=pointer]
+          - button "Enroll" [ref=f1e610] [cursor=pointer]
+  - generic [ref=f1e225]:
+    - generic [ref=f1e226]:
+      - img "logo" [ref=f1e228]
+      - generic [ref=f1e229]:
+        - link "Privacy Policy" [ref=f1e230] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f1e231]: "|"
+        - link "Prescribing Information" [ref=f1e232] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f1e233]: "|"
+        - link "Terms and Conditions" [ref=f1e234] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f1e235]:
+      - paragraph [ref=f1e236]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f1e237]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

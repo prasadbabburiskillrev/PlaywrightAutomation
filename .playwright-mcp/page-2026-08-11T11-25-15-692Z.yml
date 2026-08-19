@@ -1,0 +1,50 @@
+- generic [ref=e5]:
+  - img "Apotex Favicon" [ref=e8] [cursor=pointer]
+  - generic [ref=e11]:
+    - paragraph [ref=e13]: Welcome to the EVDI™ (trabectedin) Injection Copay Savings Program
+    - generic [ref=e14]:
+      - generic [ref=e16] [cursor=pointer]:
+        - paragraph [ref=e17]: I am a Patient
+        - radiogroup [ref=e21]:
+          - generic [ref=e25]:
+            - radio "Enroll in Copay Assistance" [checked] [active] [ref=e29]
+            - generic [ref=e30]: Enroll in Copay Assistance
+          - generic [ref=e35]:
+            - radio "Upload Documents" [ref=e39]
+            - generic [ref=e40]: Upload Documents
+      - generic [ref=e43] [cursor=pointer]:
+        - paragraph [ref=e44]: I am a Healthcare Provider
+        - generic:
+          - generic:
+            - generic:
+              - radiogroup:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - radio "Enroll Patient in Copay Assistance" [disabled]
+                        - generic: Enroll Patient in Copay Assistance
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - radio "Upload Documents" [disabled]
+                        - generic: Upload Documents
+    - button "Next" [ref=e70] [cursor=pointer]
+  - generic [ref=e72]:
+    - generic [ref=e73]:
+      - img "logo" [ref=e75]
+      - generic [ref=e76]:
+        - link "Privacy Policy" [ref=e77] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=e78]: "|"
+        - link "Prescribing Information" [ref=e79] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=e80]: "|"
+        - link "Terms and Conditions" [ref=e81] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=e82]:
+      - paragraph [ref=e83]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=e84]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

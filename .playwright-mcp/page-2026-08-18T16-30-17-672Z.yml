@@ -1,0 +1,22 @@
+- generic [ref=e268]:
+  - img "Apotex Favicon" [ref=e271] [cursor=pointer]
+  - generic [ref=e274]:
+    - heading "Thank you for your request!" [level=1] [ref=e275]
+    - generic [ref=e276]:
+      - paragraph [ref=e277]: Unfortunately, you do not meet the program's eligibility criteria and are ineligible to receive Copay assistance for EVDI™ (trabectedin) Injection.
+      - paragraph [ref=e278]: If you have any questions, please contact the EVDI™ (trabectedin) Injection Copay Savings Program at (833) 393-5702, Monday through Friday, 8AM - 8PM ET.
+  - generic [ref=e280]:
+    - generic [ref=e281]:
+      - img "logo" [ref=e283]
+      - generic [ref=e284]:
+        - link "Privacy Policy" [ref=e285] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=e286]: "|"
+        - link "Prescribing Information" [ref=e287] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=e288]: "|"
+        - link "Terms and Conditions" [ref=e289] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=e290]:
+      - paragraph [ref=e291]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=e292]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

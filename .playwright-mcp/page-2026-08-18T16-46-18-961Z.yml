@@ -1,0 +1,32 @@
+- generic [ref=f1e630]:
+  - img "Apotex Favicon" [ref=f1e633] [cursor=pointer]
+  - generic [ref=f1e635]:
+    - generic [ref=f1e636]:
+      - heading "Congratulations!" [level=1] [ref=f1e637]
+      - generic [ref=f1e638]:
+        - paragraph [ref=f1e639]: "You have successfully enrolled in the EVDI™ (trabectedin) Injection Copay Savings Program. You may download and print the savings card now by simply clicking \"Download Copay Savings Card\" below. Your unique Copay savings information is:"
+        - list [ref=f1e640]:
+          - listitem [ref=f1e641]: "Payor ID: 56155"
+          - listitem [ref=f1e642]: "Group#: 00003756"
+          - listitem [ref=f1e643]: "ID: 1001B3DH4"
+        - paragraph [ref=f1e644]: To ensure your savings are applied to your subscription out-of-pocket costs for EVDI™ (trabectedin) Injection, please provide the information above to your healthcare provider and/or pharmacy.
+        - paragraph [ref=f1e645]: If you have any questions or issues regarding the use of this program, please call us at (833) 393-5702, Monday through Friday, 8AM - 8PM ET.
+        - button "Download Copay Savings Card" [ref=f1e647] [cursor=pointer]
+        - paragraph [ref=f1e648]: "*Terms and conditions apply."
+    - img [ref=f1e650]:
+      - generic [ref=f1e651]: 1001B3DH4
+  - generic [ref=f1e838]:
+    - generic [ref=f1e839]:
+      - img "logo" [ref=f1e841]
+      - generic [ref=f1e842]:
+        - link "Privacy Policy" [ref=f1e843] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f1e844]: "|"
+        - link "Prescribing Information" [ref=f1e845] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f1e846]: "|"
+        - link "Terms and Conditions" [ref=f1e847] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f1e848]:
+      - paragraph [ref=f1e849]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f1e850]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

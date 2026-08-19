@@ -1,0 +1,139 @@
+- generic [ref=f1e90]:
+  - img "Apotex Favicon" [ref=f1e239] [cursor=pointer]
+  - main [ref=f1e92]:
+    - generic [ref=f1e97]:
+      - generic [ref=f1e99]:
+        - generic [ref=f1e100]: Enroll in Copay Assistance
+        - generic [ref=f1e101]:
+          - generic [ref=f1e102] [cursor=pointer]: Eligibility
+          - generic [ref=f1e108]: Patient Information
+          - generic [ref=f1e115]: Patient Consent
+          - generic [ref=f1e122]: Success
+      - generic [ref=f1e253]:
+        - heading "Patient Information" [level=1] [ref=f1e256]
+        - generic [ref=f1e258]:
+          - generic [ref=f1e259]:
+            - generic [ref=f1e260]:
+              - paragraph [ref=f1e261]: Please enter your demographic information.
+              - paragraph [ref=f1e262]: "*Indicates a required field."
+            - generic [ref=f1e263]:
+              - generic [ref=f1e264]:
+                - generic [ref=f1e265]:
+                  - generic [ref=f1e266]: First Name*
+                  - generic [ref=f1e269]:
+                    - group
+                    - textbox [ref=f1e271]
+                - generic [ref=f1e272]:
+                  - generic [ref=f1e273]: Last Name*
+                  - generic [ref=f1e276]:
+                    - group
+                    - textbox [ref=f1e278]
+              - generic [ref=f1e279]:
+                - generic [ref=f1e280]:
+                  - generic [ref=f1e281]: Date of Birth*
+                  - generic [ref=f1e284]:
+                    - group
+                    - textbox [ref=f1e286]
+                  - generic [ref=f1e287]: MM/DD/YYYY
+                - generic [ref=f1e288]:
+                  - generic [ref=f1e289]: Gender*
+                  - combobox [expanded] [ref=f1e292]:
+                    - group
+                    - combobox [active] [ref=f1e294]
+                    - listbox [ref=f1e434]:
+                      - option "Male" [ref=f1e435] [cursor=pointer]
+                      - option "Female" [ref=f1e438] [cursor=pointer]
+                      - option "Prefer not to answer" [ref=f1e441] [cursor=pointer]
+              - generic [ref=f1e302]:
+                - generic [ref=f1e303]: Address Line 1*
+                - generic [ref=f1e306]:
+                  - group
+                  - textbox [ref=f1e308]
+              - generic [ref=f1e310]:
+                - generic [ref=f1e311]: Address Line 2
+                - generic [ref=f1e314]:
+                  - group
+                  - textbox [ref=f1e316]
+              - generic [ref=f1e317]:
+                - generic [ref=f1e318]:
+                  - generic [ref=f1e319]: Zip Code*
+                  - generic [ref=f1e322]:
+                    - group
+                    - textbox [ref=f1e324]
+                - generic [ref=f1e325]:
+                  - generic [ref=f1e326]: City*
+                  - generic [ref=f1e329]:
+                    - group
+                    - textbox [ref=f1e331]
+                - generic [ref=f1e332]:
+                  - generic [ref=f1e333]: State*
+                  - combobox [ref=f1e336]:
+                    - group
+                    - combobox [ref=f1e338]
+              - generic [ref=f1e345]:
+                - generic [ref=f1e346]:
+                  - generic [ref=f1e347]: Mobile Phone*
+                  - generic [ref=f1e350]:
+                    - group
+                    - textbox [ref=f1e352]
+                  - generic [ref=f1e357]: 000-000-0000
+                - generic [ref=f1e358]:
+                  - generic [ref=f1e359]: Home Phone
+                  - generic [ref=f1e362]:
+                    - group
+                    - textbox [ref=f1e364]
+                  - generic [ref=f1e369]: 000-000-0000
+              - generic [ref=f1e371]:
+                - generic [ref=f1e372]: Email Address*
+                - generic [ref=f1e375]:
+                  - group
+                  - textbox [ref=f1e377]
+            - separator [ref=f1e378]
+            - generic [ref=f1e379]:
+              - generic [ref=f1e380]:
+                - generic [ref=f1e381]:
+                  - generic [ref=f1e382]: Patient Representative Name
+                  - generic [ref=f1e385]:
+                    - group
+                    - textbox [ref=f1e387]
+                - generic [ref=f1e388]:
+                  - generic [ref=f1e389]: Relationship to Patient
+                  - generic [ref=f1e392]:
+                    - group
+                    - textbox [ref=f1e394]
+              - generic [ref=f1e395]:
+                - generic [ref=f1e396]:
+                  - generic [ref=f1e397]: Patient Representative Mobile Phone
+                  - generic [ref=f1e400]:
+                    - group
+                    - textbox [ref=f1e402]
+                  - generic [ref=f1e407]: 000-000-0000
+                - generic [ref=f1e408]:
+                  - generic [ref=f1e409]: Patient Representative Home Phone
+                  - generic [ref=f1e412]:
+                    - group
+                    - textbox [ref=f1e414]
+                  - generic [ref=f1e419]: 000-000-0000
+              - generic [ref=f1e421]:
+                - generic [ref=f1e422]: Patient Representative Email Address
+                - generic [ref=f1e425]:
+                  - group
+                  - textbox [ref=f1e427]
+          - generic [ref=f1e429]:
+            - button "Back" [ref=f1e430] [cursor=pointer]
+            - button "Next" [ref=f1e432] [cursor=pointer]
+  - generic [ref=f1e225]:
+    - generic [ref=f1e226]:
+      - img "logo" [ref=f1e228]
+      - generic [ref=f1e229]:
+        - link "Privacy Policy" [ref=f1e230] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f1e231]: "|"
+        - link "Prescribing Information" [ref=f1e232] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f1e233]: "|"
+        - link "Terms and Conditions" [ref=f1e234] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f1e235]:
+      - paragraph [ref=f1e236]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f1e237]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

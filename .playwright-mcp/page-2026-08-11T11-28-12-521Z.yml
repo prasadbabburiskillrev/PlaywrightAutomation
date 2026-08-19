@@ -1,0 +1,50 @@
+- generic [ref=f2e5]:
+  - img "Apotex Favicon" [ref=f2e8] [cursor=pointer]
+  - generic [ref=f2e11]:
+    - paragraph [ref=f2e13]: Welcome to the EVDI™ (trabectedin) Injection Copay Savings Program
+    - generic [ref=f2e14]:
+      - generic [ref=f2e16] [cursor=pointer]:
+        - paragraph [ref=f2e17]: I am a Patient
+        - radiogroup [ref=f2e21]:
+          - generic [ref=f2e25]:
+            - radio "Enroll in Copay Assistance" [ref=f2e29]
+            - generic [ref=f2e30]: Enroll in Copay Assistance
+          - generic [ref=f2e35]:
+            - radio "Upload Documents" [checked] [ref=f2e39]
+            - generic [ref=f2e40]: Upload Documents
+      - generic [ref=f2e43] [cursor=pointer]:
+        - paragraph [ref=f2e44]: I am a Healthcare Provider
+        - generic:
+          - generic:
+            - generic:
+              - radiogroup:
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - radio "Enroll Patient in Copay Assistance" [disabled]
+                        - generic: Enroll Patient in Copay Assistance
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - radio "Upload Documents" [disabled]
+                        - generic: Upload Documents
+    - button "Next" [ref=f2e70] [cursor=pointer]
+  - generic [ref=f2e72]:
+    - generic [ref=f2e73]:
+      - img "logo" [ref=f2e75]
+      - generic [ref=f2e76]:
+        - link "Privacy Policy" [ref=f2e77] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f2e78]: "|"
+        - link "Prescribing Information" [ref=f2e79] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f2e80]: "|"
+        - link "Terms and Conditions" [ref=f2e81] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f2e82]:
+      - paragraph [ref=f2e83]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f2e84]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

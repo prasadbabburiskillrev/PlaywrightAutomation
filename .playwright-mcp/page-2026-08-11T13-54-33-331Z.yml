@@ -1,0 +1,94 @@
+- generic [ref=f13e90]:
+  - img "Apotex Favicon" [ref=f13e93] [cursor=pointer]
+  - main [ref=f13e94]:
+    - generic [ref=f13e99]:
+      - generic [ref=f13e101]:
+        - generic [ref=f13e102]: Enroll in Copay Assistance
+        - generic [ref=f13e103]:
+          - generic [ref=f13e104]: Eligibility
+          - generic [ref=f13e110]: Patient Information
+          - generic [ref=f13e117]: Patient Consent
+          - generic [ref=f13e124]: Success
+      - generic [ref=f13e131]:
+        - heading "Patient Eligibility" [level=2] [ref=f13e133]
+        - generic [ref=f13e134]:
+          - generic [ref=f13e135]:
+            - paragraph
+            - paragraph [ref=f13e136]: Please answer the questions below to determine your eligbility for the Copay program.
+            - paragraph [ref=f13e137]: "*Indicates selection is required."
+            - paragraph
+          - generic [ref=f13e138]:
+            - generic [ref=f13e139]:
+              - generic [ref=f13e140]:
+                - paragraph [ref=f13e141]: "*Do you purchase your prescription medication with cash or through a federal or state prescription drug program, such as Medicaid, Medicare Part A, B, C and/or D, TRICARE, CHAMPUS, Puerto Rico Government Health Insurance Plan, Department of Defense, Veterans Administration, or any other state or federal healthcare program?"
+                - radiogroup [ref=f13e145]:
+                  - generic [ref=f13e146]:
+                    - generic [ref=f13e147]:
+                      - radio "Yes" [ref=f13e150] [cursor=pointer]
+                      - generic [ref=f13e151] [cursor=pointer]
+                    - generic [ref=f13e152] [cursor=pointer]: "Yes"
+                  - generic [ref=f13e153]:
+                    - generic [ref=f13e154]:
+                      - radio "No" [checked] [ref=f13e157] [cursor=pointer]
+                      - generic [ref=f13e158] [cursor=pointer]
+                    - generic [ref=f13e159] [cursor=pointer]: "No"
+              - generic [ref=f13e160]:
+                - paragraph [ref=f13e161]: "*Do you live in the US excluding Massachusetts and California?"
+                - radiogroup [ref=f13e165]:
+                  - generic [ref=f13e166]:
+                    - generic [ref=f13e167]:
+                      - radio "Yes" [checked] [ref=f13e170] [cursor=pointer]
+                      - generic [ref=f13e171] [cursor=pointer]
+                    - generic [ref=f13e172] [cursor=pointer]: "Yes"
+                  - generic [ref=f13e173]:
+                    - generic [ref=f13e174]:
+                      - radio "No" [ref=f13e177] [cursor=pointer]
+                      - generic [ref=f13e178] [cursor=pointer]
+                    - generic [ref=f13e179] [cursor=pointer]: "No"
+              - generic [ref=f13e180]:
+                - paragraph [ref=f13e181]: "*I have commercial health insurance where a portion of this drug is covered?"
+                - radiogroup [ref=f13e185]:
+                  - generic [ref=f13e186]:
+                    - generic [ref=f13e187]:
+                      - radio "Yes" [checked] [ref=f13e190] [cursor=pointer]
+                      - generic [ref=f13e191] [cursor=pointer]
+                    - generic [ref=f13e192] [cursor=pointer]: "Yes"
+                  - generic [ref=f13e193]:
+                    - generic [ref=f13e194]:
+                      - radio "No" [ref=f13e197] [cursor=pointer]
+                      - generic [ref=f13e198] [cursor=pointer]
+                    - generic [ref=f13e199] [cursor=pointer]: "No"
+              - generic [ref=f13e200]:
+                - paragraph [ref=f13e201]:
+                  - text: "*I have read and agreed to the"
+                  - strong [ref=f13e202] [cursor=pointer]: terms and conditions
+                  - text: . I certify that I am an eligible patient that if my eligibility changes, I will cease to participate.
+                - radiogroup [ref=f13e206]:
+                  - generic [ref=f13e207]:
+                    - generic [ref=f13e208]:
+                      - radio "Yes" [ref=f13e211] [cursor=pointer]
+                      - generic [ref=f13e212] [cursor=pointer]
+                    - generic [ref=f13e213] [cursor=pointer]: "Yes"
+                  - generic [ref=f13e214]:
+                    - generic [ref=f13e215]:
+                      - radio "No" [ref=f13e218] [cursor=pointer]
+                      - generic [ref=f13e219] [cursor=pointer]
+                    - generic [ref=f13e220] [cursor=pointer]: "No"
+            - generic [ref=f13e221]:
+              - button "Back" [ref=f13e222] [cursor=pointer]
+              - button "Next" [ref=f13e224] [cursor=pointer]
+  - generic [ref=f13e227]:
+    - generic [ref=f13e228]:
+      - img "logo" [ref=f13e230]
+      - generic [ref=f13e231]:
+        - link "Privacy Policy" [ref=f13e232] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f13e233]: "|"
+        - link "Prescribing Information" [ref=f13e234] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f13e235]: "|"
+        - link "Terms and Conditions" [ref=f13e236] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f13e237]:
+      - paragraph [ref=f13e238]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f13e239]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

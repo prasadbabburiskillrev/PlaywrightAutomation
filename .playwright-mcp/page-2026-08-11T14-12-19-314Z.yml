@@ -1,0 +1,39 @@
+- generic [ref=f14e5]:
+  - img "Apotex Favicon" [ref=f14e8] [cursor=pointer]
+  - generic [ref=f14e11]:
+    - paragraph [ref=f14e13]: Welcome to the EVDI™ (trabectedin) Injection Copay Savings Program
+    - generic [ref=f14e14]:
+      - generic [ref=f14e16] [cursor=pointer]:
+        - paragraph [ref=f14e17]: I am a Patient
+        - radiogroup [ref=f14e21]:
+          - generic [ref=f14e25]:
+            - radio "Enroll in Copay Assistance" [ref=f14e29]
+            - generic [ref=f14e30]: Enroll in Copay Assistance
+          - generic [ref=f14e35]:
+            - radio "Upload Documents" [ref=f14e39]
+            - generic [ref=f14e40]: Upload Documents
+      - generic [ref=f14e43] [cursor=pointer]:
+        - paragraph [ref=f14e44]: I am a Healthcare Provider
+        - radiogroup [ref=f14e48]:
+          - generic [ref=f14e52]:
+            - radio "Enroll Patient in Copay Assistance" [ref=f14e56]
+            - generic [ref=f14e57]: Enroll Patient in Copay Assistance
+          - generic [ref=f14e62]:
+            - radio "Upload Documents" [ref=f14e66]
+            - generic [ref=f14e67]: Upload Documents
+    - button "Next" [disabled] [ref=f14e70]
+  - generic [ref=f14e72]:
+    - generic [ref=f14e73]:
+      - img "logo" [ref=f14e75]
+      - generic [ref=f14e76]:
+        - link "Privacy Policy" [ref=f14e77] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f14e78]: "|"
+        - link "Prescribing Information" [ref=f14e79] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f14e80]: "|"
+        - link "Terms and Conditions" [ref=f14e81] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f14e82]:
+      - paragraph [ref=f14e83]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f14e84]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

@@ -1,0 +1,36 @@
+- generic [ref=f7e5]:
+  - img "Apotex Favicon" [ref=f7e8] [cursor=pointer]
+  - main [ref=f7e9]:
+    - generic [ref=f7e19]:
+      - generic [ref=f7e20]:
+        - heading "Document Upload" [level=1] [ref=f7e21]
+        - paragraph [ref=f7e22]: Please upload at least one document.
+      - generic [ref=f7e23]:
+        - generic [ref=f7e25]:
+          - generic [ref=f7e30]:
+            - img [ref=f7e33] [cursor=pointer]
+            - heading "Drop file to upload or Click Here" [level=4] [ref=f7e36]:
+              - generic [ref=f7e37]: Drop file to upload
+              - generic [ref=f7e38]: or
+              - generic [ref=f7e39] [cursor=pointer]: Click Here
+          - paragraph [ref=f7e41]: "Accepted File Types: jpeg, jpg, pdf, png Single File Size: 10 MB Files not meeting the requirements will not be accepted."
+        - alert [ref=f7e43]:
+          - generic [ref=f7e44]: One or more files could not be uploaded due to an invalid file type. Please select files that match the valid type(s) listed above.
+        - generic [ref=f7e48]:
+          - button "Back" [ref=f7e49] [cursor=pointer]
+          - button "Upload" [ref=f7e51] [cursor=pointer]
+  - generic [ref=f7e54]:
+    - generic [ref=f7e55]:
+      - img "logo" [ref=f7e57]
+      - generic [ref=f7e58]:
+        - link "Privacy Policy" [ref=f7e59] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f7e60]: "|"
+        - link "Prescribing Information" [ref=f7e61] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f7e62]: "|"
+        - link "Terms and Conditions" [ref=f7e63] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f7e64]:
+      - paragraph [ref=f7e65]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f7e66]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

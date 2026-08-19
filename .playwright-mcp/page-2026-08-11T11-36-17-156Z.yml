@@ -1,0 +1,167 @@
+- generic [ref=f4e5]:
+  - img "Apotex Favicon" [ref=f4e8] [cursor=pointer]
+  - main [ref=f4e9]:
+    - generic [ref=f4e14]:
+      - generic [ref=f4e16]:
+        - generic [ref=f4e17]: Enroll Patient in Copay Assistance
+        - generic [ref=f4e18]:
+          - generic [ref=f4e19]: Eligibility
+          - generic [ref=f4e25]: Patient Information
+          - generic [ref=f4e32]: Success
+      - generic [ref=f4e40]:
+        - heading "Patient Information" [level=1] [ref=f4e43]
+        - generic [ref=f4e45]:
+          - generic [ref=f4e46]:
+            - generic [ref=f4e47]:
+              - paragraph [ref=f4e48]: Please enter your demographic information.
+              - paragraph [ref=f4e49]: "*Indicates a required field."
+            - generic [ref=f4e235]:
+              - img "logo" [ref=f4e236]
+              - generic [ref=f4e237]: There are 10 errors
+            - generic [ref=f4e50]:
+              - generic [ref=f4e51]:
+                - generic [ref=f4e52]:
+                  - generic [ref=f4e53]: First Name*
+                  - generic [ref=f4e56]:
+                    - group
+                    - textbox [ref=f4e58]
+                  - generic [ref=f4e238]:
+                    - img "warning" [ref=f4e239]
+                    - paragraph [ref=f4e240]: Required
+                - generic [ref=f4e59]:
+                  - generic [ref=f4e60]: Last Name*
+                  - generic [ref=f4e63]:
+                    - group
+                    - textbox [ref=f4e65]
+                  - generic [ref=f4e241]:
+                    - img "warning" [ref=f4e242]
+                    - paragraph [ref=f4e243]: Required
+              - generic [ref=f4e66]:
+                - generic [ref=f4e67]:
+                  - generic [ref=f4e68]: Date of Birth*
+                  - generic [ref=f4e71]:
+                    - group
+                    - textbox [ref=f4e73]
+                  - generic [ref=f4e74]: MM/DD/YYYY
+                  - generic [ref=f4e244]:
+                    - img "warning" [ref=f4e245]
+                    - paragraph [ref=f4e246]: Required
+                - generic [ref=f4e75]:
+                  - generic [ref=f4e76]: Gender*
+                  - combobox [ref=f4e79]:
+                    - group
+                    - combobox [ref=f4e81]
+                  - generic [ref=f4e247]:
+                    - img "warning" [ref=f4e248]
+                    - paragraph [ref=f4e249]: Required
+              - generic [ref=f4e89]:
+                - generic [ref=f4e90]: Address Line 1*
+                - generic [ref=f4e93]:
+                  - group
+                  - textbox [ref=f4e95]
+                - generic [ref=f4e250]:
+                  - img "warning" [ref=f4e251]
+                  - paragraph [ref=f4e252]: Required
+              - generic [ref=f4e97]:
+                - generic [ref=f4e98]: Address Line 2
+                - generic [ref=f4e101]:
+                  - group
+                  - textbox [ref=f4e103]
+              - generic [ref=f4e104]:
+                - generic [ref=f4e105]:
+                  - generic [ref=f4e106]: Zip Code*
+                  - generic [ref=f4e109]:
+                    - group
+                    - textbox [ref=f4e111]
+                  - generic [ref=f4e253]:
+                    - img "warning" [ref=f4e254]
+                    - paragraph [ref=f4e255]: Required
+                - generic [ref=f4e112]:
+                  - generic [ref=f4e113]: City*
+                  - generic [ref=f4e116]:
+                    - group
+                    - textbox [ref=f4e118]
+                  - generic [ref=f4e256]:
+                    - img "warning" [ref=f4e257]
+                    - paragraph [ref=f4e258]: Required
+                - generic [ref=f4e119]:
+                  - generic [ref=f4e120]: State*
+                  - combobox [ref=f4e123]:
+                    - group
+                    - combobox [ref=f4e125]
+                  - generic [ref=f4e259]:
+                    - img "warning" [ref=f4e260]
+                    - paragraph [ref=f4e261]: Required
+              - generic [ref=f4e132]:
+                - generic [ref=f4e133]:
+                  - generic [ref=f4e134]: Mobile Phone*
+                  - generic [ref=f4e137]:
+                    - group
+                    - textbox [ref=f4e139]
+                  - generic [ref=f4e144]: 000-000-0000
+                  - generic [ref=f4e263]:
+                    - img "warning" [ref=f4e264]
+                    - paragraph [ref=f4e265]: Required
+                - generic [ref=f4e145]:
+                  - generic [ref=f4e146]: Home Phone
+                  - generic [ref=f4e149]:
+                    - group
+                    - textbox [ref=f4e151]
+                  - generic [ref=f4e156]: 000-000-0000
+              - generic [ref=f4e158]:
+                - generic [ref=f4e159]: Email Address*
+                - generic [ref=f4e162]:
+                  - group
+                  - textbox [ref=f4e164]
+                - generic [ref=f4e267]:
+                  - img "warning" [ref=f4e268]
+                  - paragraph [ref=f4e269]: Required
+            - separator [ref=f4e165]
+            - generic [ref=f4e166]:
+              - generic [ref=f4e167]:
+                - generic [ref=f4e168]:
+                  - generic [ref=f4e169]: Patient Representative Name
+                  - generic [ref=f4e172]:
+                    - group
+                    - textbox [ref=f4e174]
+                - generic [ref=f4e175]:
+                  - generic [ref=f4e176]: Relationship to Patient
+                  - generic [ref=f4e179]:
+                    - group
+                    - textbox [ref=f4e181]
+              - generic [ref=f4e182]:
+                - generic [ref=f4e183]:
+                  - generic [ref=f4e184]: Patient Representative Mobile Phone
+                  - generic [ref=f4e187]:
+                    - group
+                    - textbox [ref=f4e189]
+                  - generic [ref=f4e194]: 000-000-0000
+                - generic [ref=f4e195]:
+                  - generic [ref=f4e196]: Patient Representative Home Phone
+                  - generic [ref=f4e199]:
+                    - group
+                    - textbox [ref=f4e201]
+                  - generic [ref=f4e206]: 000-000-0000
+              - generic [ref=f4e208]:
+                - generic [ref=f4e209]: Patient Representative Email Address
+                - generic [ref=f4e212]:
+                  - group
+                  - textbox [ref=f4e214]
+          - generic [ref=f4e216]:
+            - button "Back" [ref=f4e217] [cursor=pointer]
+            - button "Submit" [ref=f4e219] [cursor=pointer]
+  - generic [ref=f4e222]:
+    - generic [ref=f4e223]:
+      - img "logo" [ref=f4e225]
+      - generic [ref=f4e226]:
+        - link "Privacy Policy" [ref=f4e227] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f4e228]: "|"
+        - link "Prescribing Information" [ref=f4e229] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f4e230]: "|"
+        - link "Terms and Conditions" [ref=f4e231] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f4e232]:
+      - paragraph [ref=f4e233]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f4e234]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

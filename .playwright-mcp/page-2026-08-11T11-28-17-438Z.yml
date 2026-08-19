@@ -1,0 +1,34 @@
+- generic [ref=f2e90]:
+  - img "Apotex Favicon" [ref=f2e93] [cursor=pointer]
+  - main [ref=f2e94]:
+    - generic [ref=f2e104]:
+      - generic [ref=f2e105]:
+        - heading "Document Upload" [level=1] [ref=f2e106]
+        - paragraph [ref=f2e107]: Please upload at least one document.
+      - generic [ref=f2e108]:
+        - generic [ref=f2e110]:
+          - generic [ref=f2e115]:
+            - img [ref=f2e118] [cursor=pointer]
+            - heading "Drop file to upload or Click Here" [level=4] [ref=f2e121]:
+              - generic [ref=f2e122]: Drop file to upload
+              - generic [ref=f2e123]: or
+              - generic [ref=f2e124] [cursor=pointer]: Click Here
+          - paragraph [ref=f2e126]: "Accepted File Types: jpeg, jpg, pdf, png Single File Size: 10 MB Files not meeting the requirements will not be accepted."
+        - generic [ref=f2e127]:
+          - button "Back" [ref=f2e128] [cursor=pointer]
+          - button "Upload" [ref=f2e130] [cursor=pointer]
+  - generic [ref=f2e133]:
+    - generic [ref=f2e134]:
+      - img "logo" [ref=f2e136]
+      - generic [ref=f2e137]:
+        - link "Privacy Policy" [ref=f2e138] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f2e139]: "|"
+        - link "Prescribing Information" [ref=f2e140] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f2e141]: "|"
+        - link "Terms and Conditions" [ref=f2e142] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f2e143]:
+      - paragraph [ref=f2e144]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f2e145]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY

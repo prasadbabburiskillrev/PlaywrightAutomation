@@ -1,0 +1,135 @@
+- generic [ref=f13e90]:
+  - img "Apotex Favicon" [ref=f13e93] [cursor=pointer]
+  - main [ref=f13e94]:
+    - generic [ref=f13e99]:
+      - generic [ref=f13e101]:
+        - generic [ref=f13e102]: Enroll in Copay Assistance
+        - generic [ref=f13e103]:
+          - generic [ref=f13e104] [cursor=pointer]: Eligibility
+          - generic [ref=f13e110]: Patient Information
+          - generic [ref=f13e117]: Patient Consent
+          - generic [ref=f13e124]: Success
+      - generic [ref=f13e253]:
+        - heading "Patient Information" [level=1] [ref=f13e256]
+        - generic [ref=f13e258]:
+          - generic [ref=f13e259]:
+            - generic [ref=f13e260]:
+              - paragraph [ref=f13e261]: Please enter your demographic information.
+              - paragraph [ref=f13e262]: "*Indicates a required field."
+            - generic [ref=f13e263]:
+              - generic [ref=f13e264]:
+                - generic [ref=f13e265]:
+                  - generic [ref=f13e266]: First Name*
+                  - generic [ref=f13e269]:
+                    - group
+                    - textbox [ref=f13e271]
+                - generic [ref=f13e272]:
+                  - generic [ref=f13e273]: Last Name*
+                  - generic [ref=f13e276]:
+                    - group
+                    - textbox [ref=f13e278]
+              - generic [ref=f13e279]:
+                - generic [ref=f13e280]:
+                  - generic [ref=f13e281]: Date of Birth*
+                  - generic [ref=f13e284]:
+                    - group
+                    - textbox [ref=f13e286]
+                  - generic [ref=f13e287]: MM/DD/YYYY
+                - generic [ref=f13e288]:
+                  - generic [ref=f13e289]: Gender*
+                  - combobox [ref=f13e292]:
+                    - group
+                    - combobox [ref=f13e294]
+              - generic [ref=f13e302]:
+                - generic [ref=f13e303]: Address Line 1*
+                - generic [ref=f13e306]:
+                  - group
+                  - textbox [ref=f13e308]
+              - generic [ref=f13e310]:
+                - generic [ref=f13e311]: Address Line 2
+                - generic [ref=f13e314]:
+                  - group
+                  - textbox [ref=f13e316]
+              - generic [ref=f13e317]:
+                - generic [ref=f13e318]:
+                  - generic [ref=f13e319]: Zip Code*
+                  - generic [ref=f13e322]:
+                    - group
+                    - textbox [ref=f13e324]
+                - generic [ref=f13e325]:
+                  - generic [ref=f13e326]: City*
+                  - generic [ref=f13e329]:
+                    - group
+                    - textbox [ref=f13e331]
+                - generic [ref=f13e332]:
+                  - generic [ref=f13e333]: State*
+                  - combobox [ref=f13e336]:
+                    - group
+                    - combobox [ref=f13e338]
+              - generic [ref=f13e345]:
+                - generic [ref=f13e346]:
+                  - generic [ref=f13e347]: Mobile Phone*
+                  - generic [ref=f13e350]:
+                    - group
+                    - textbox [ref=f13e352]
+                  - generic [ref=f13e357]: 000-000-0000
+                - generic [ref=f13e358]:
+                  - generic [ref=f13e359]: Home Phone
+                  - generic [ref=f13e362]:
+                    - group
+                    - textbox [ref=f13e364]
+                  - generic [ref=f13e369]: 000-000-0000
+              - generic [ref=f13e371]:
+                - generic [ref=f13e372]: Email Address*
+                - generic [ref=f13e375]:
+                  - group
+                  - textbox [ref=f13e377]
+            - separator [ref=f13e378]
+            - generic [ref=f13e379]:
+              - generic [ref=f13e380]:
+                - generic [ref=f13e381]:
+                  - generic [ref=f13e382]: Patient Representative Name
+                  - generic [ref=f13e385]:
+                    - group
+                    - textbox [ref=f13e387]
+                - generic [ref=f13e388]:
+                  - generic [ref=f13e389]: Relationship to Patient
+                  - generic [ref=f13e392]:
+                    - group
+                    - textbox [ref=f13e394]
+              - generic [ref=f13e395]:
+                - generic [ref=f13e396]:
+                  - generic [ref=f13e397]: Patient Representative Mobile Phone
+                  - generic [ref=f13e400]:
+                    - group
+                    - textbox [ref=f13e402]
+                  - generic [ref=f13e407]: 000-000-0000
+                - generic [ref=f13e408]:
+                  - generic [ref=f13e409]: Patient Representative Home Phone
+                  - generic [ref=f13e412]:
+                    - group
+                    - textbox [ref=f13e414]
+                  - generic [ref=f13e419]: 000-000-0000
+              - generic [ref=f13e421]:
+                - generic [ref=f13e422]: Patient Representative Email Address
+                - generic [ref=f13e425]:
+                  - group
+                  - textbox [ref=f13e427]
+          - generic [ref=f13e429]:
+            - button "Back" [ref=f13e430] [cursor=pointer]
+            - button "Next" [ref=f13e432] [cursor=pointer]
+  - generic [ref=f13e227]:
+    - generic [ref=f13e228]:
+      - img "logo" [ref=f13e230]
+      - generic [ref=f13e231]:
+        - link "Privacy Policy" [ref=f13e232] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f13e233]: "|"
+        - link "Prescribing Information" [ref=f13e234] [cursor=pointer]:
+          - /url: "#"
+        - generic [ref=f13e235]: "|"
+        - link "Terms and Conditions" [ref=f13e236] [cursor=pointer]:
+          - /url: "#"
+    - generic [ref=f13e237]:
+      - paragraph [ref=f13e238]: © Apotex Inc. 2026. All rights reserved.
+      - paragraph [ref=f13e239]: This site is intended for US audiences only. XXX-XXXX-XX MM/YYYY
