@@ -50,7 +50,13 @@
       "Bash(node scratch-checkpdf.mjs)",
       "Bash(rm -f scratch-checkpdf.mjs)",
       "Bash(python -)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(git push *)",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_close",
+      "Bash(npm run *)",
+      "Bash(xargs -I{} git ls-tree -r {} --name-only)",
+      "Bash(git add *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\LENOVO\\Documents\\Playwright_Automation\\.playwright-mcp",

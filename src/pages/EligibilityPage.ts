@@ -3,10 +3,12 @@ import { EligibilityAnswers } from '../testdata/types';
 
 export class EligibilityPage {
   readonly page: Page;
+  readonly heading: Locator;
   readonly nextButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.heading = page.getByRole('heading', { name: 'Patient Eligibility' });
     this.nextButton = page.getByRole('button', { name: 'Next' });
   }
 
