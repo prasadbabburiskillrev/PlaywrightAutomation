@@ -75,10 +75,13 @@ intended import path for consumers outside that folder — update them when addi
 
 `src/screenshots/` never adds its own locators — it only calls existing
 `src/pages`/`src/modules` methods and adds reusable interaction helpers (e.g. dropdown
-expansion) under `src/screenshots/core/`. `src/screenshots/core/screenshotHelper.ts` owns
-the shared `RunContext` (output dirs, PNG manifest, auto-incrementing sequence number
-across pages within one run); `pdfMerger.ts` merges the manifest into one ordered PDF at
-the end of a run.
+expansion) under `src/screenshots/core/`. The actual capture engine —
+`screenshotHelper.ts` (owns the shared `RunContext`: output dirs, PNG manifest,
+auto-incrementing sequence number across pages within one run) and `pdfMerger.ts`
+(merges the manifest into one ordered PDF) — lives in `src/shared/screenshots-engine/`,
+not `src/screenshots/core/`, since neither file has any Apotex-specific knowledge.
+`src/screenshots/core/` now holds only program-specific interaction helpers (e.g.
+`dropdownExpander.ts`).
 
 ## Non-obvious behavior to know before editing tests/pages
 

@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { LandingPage } from '../../pages/LandingPage';
 import { PortalRole } from '../../testdata/types';
-import { RunContext, capture } from '../core/screenshotHelper';
+import { RunContext, capture } from '../../shared/screenshots-engine/screenshotHelper';
 
 export async function captureHomePage(page: Page, context: RunContext, role: PortalRole): Promise<void> {
   const landingPage = new LandingPage(page);
