@@ -53,10 +53,8 @@ directory would imply monorepo infrastructure that doesn't exist here.
 ```
 src/
   shared/                            (shared engine, new — reused by every program)
-    fixtures/                        generic fixture-wiring base
-    utils/DataGenerator.ts           (moved from src/utils, unchanged)
     screenshots-engine/              (moved from src/screenshots/core: screenshotHelper.ts,
-                                       pdfMerger.ts, dropdownExpander.ts)
+                                       pdfMerger.ts only — see note below)
     design-validation-engine/
       figmaClient.ts                 Figma REST API wrapper
       extractSiteMetadata.ts         Playwright getComputedStyle/boundingBox/textContent helper
@@ -67,21 +65,37 @@ src/
 
   programs/
     apotex-evdi/
-      pages/  modules/  testdata/    (moved, unchanged — program-specific locators/domain types)
+      pages/  modules/  fixtures/  testdata/  utils/  config/
+                                    (moved, unchanged — program-specific locators/domain
+                                     types/fixture-wiring/data-generation/config)
       tests/                        (moved from src/tests — regression specs; name kept as-is,
                                        no value in renaming to "regression/")
-      screenshots/                  (moved from src/screenshots/pages + runner —
-                                       program-specific capture sequences)
+      screenshots/                  (moved from src/screenshots/pages + runner + the
+                                       program-specific part of core/ — see note below)
       design-validation/
         baseline/<page>.desktop.json
         baseline/<page>.mobile.json
         mapping/<page>.ts           Figma node id/name -> page-object locator,
                                        + optional per-component tolerance override
-      .env                          BASE_URL, FIGMA_FILE_KEY, FIGMA_DESKTOP_NODE_ID,
-                                       FIGMA_MOBILE_NODE_ID
+      .env                          APOTEX_EVDI_BASE_URL, FIGMA_FILE_KEY,
+                                       FIGMA_DESKTOP_NODE_ID, FIGMA_MOBILE_NODE_ID
     <new-program>/                  ← onboarding a program = copy this whole subtree,
-                                       rename, edit locators/testdata/.env
+                                       rename (including the `.env` var prefix), edit
+                                       locators/testdata/.env
 ```
+
+**Note on `fixtures/`, `DataGenerator.ts`, and `dropdownExpander.ts` — not shared.**
+Verified at the file level: `fixtures/index.ts` wires only this program's own pages/
+modules (there's no generic fixture base to extract yet — `base.extend` is called
+directly, once, per program); `DataGenerator.ts` imports `PatientInformationData`, a
+domain type specific to this program's form fields; and
+`screenshots/core/dropdownExpander.ts` hardcodes this program's own field names
+(`input[name="gender"]`, `input[name="state"]`) and documents an Apotex-only combobox
+race condition. None of the three has any logic a second program could reuse as-is, so
+per YAGNI they stay in `programs/apotex-evdi/`, not `src/shared/`, until a second
+program actually reveals a genuine duplication to extract. Only `screenshotHelper.ts`
+and `pdfMerger.ts` (pure file I/O, sequence counting, PDF merging — zero domain
+knowledge) qualify as shared engine code today.
 
 Only program-specific *data* (locators, testdata, mapping, baseline, config)
 lives under `src/programs/<name>/`. Engine code lives once, under
@@ -101,16 +115,19 @@ a tab per project, one place to keep timeout/reporter settings in sync):
 ```ts
 projects: [
   { name: 'apotex-evdi', testDir: 'src/programs/apotex-evdi/tests',
-    use: { baseURL: process.env.APOTEX_BASE_URL } },
+    use: { baseURL: process.env.APOTEX_EVDI_BASE_URL } },
   // { name: '<new-program>', testDir: 'src/programs/<new-program>/tests', use: { ... } },
 ]
 ```
 
-`package.json` scripts: `test:apotex` (`playwright test --project=apotex-evdi`),
-`screenshots:apotex:<res>`, `figma:sync:apotex`, `design-check:apotex`.
-Onboarding a program = copy `src/programs/apotex-evdi/`, rename, edit
-locators/testdata/`.env`, add one `projects[]` entry + matching script lines
-— the one accepted exception to pure copy-paste, consistent with the
+`package.json` scripts: `test:apotex-evdi` (`playwright test --project=apotex-evdi`)
+is added; `screenshots:<res>` scripts keep their existing unprefixed names (only their
+target paths change) since only one program exists today — prefixing them
+(`screenshots:apotex-evdi:<res>`, `figma:sync:apotex-evdi`, `design-check:apotex-evdi`)
+is deferred until a second program actually needs the disambiguation, per YAGNI.
+Onboarding a program = copy `src/programs/apotex-evdi/`, rename (including the `.env`
+var prefix), edit locators/testdata/`.env`, add one `projects[]` entry + matching
+script lines — the one accepted exception to pure copy-paste, consistent with the
 existing `screenshots:<resolution>` convention already in this repo.
 
 ### C. Figma baseline sync (`figma:sync:<program>` — manual/periodic only, never part of `npm test` or CI)
@@ -205,12 +222,14 @@ is generated).
 
 ## Testing / Verification
 
-- After restructuring: `npm run test:apotex` and one `npm run
-  screenshots:apotex:xsMobile` run must produce identical results to today's
+- After restructuring: `npm run test:apotex-evdi` and one `npm run
+  screenshots:xsMobile` run must produce identical results to today's
   `npm test`/`npm run screenshots:xsMobile` (same pass/fail, same output
-  shape) — proves the move didn't change behavior.
-- After the Figma pillar lands: `npm run figma:sync:apotex` followed by `npm
-  run design-check:apotex` against an unmodified live site should produce a
-  clean (or near-clean, pending tolerance tuning) report — a first real run
-  is expected to surface mapping/tolerance issues to fix, not a bug in the
-  harness.
+  shape) — proves the move didn't change behavior. (`screenshots:xsMobile`
+  keeps its existing unprefixed name — see Section B.)
+- After the Figma pillar lands: `npm run figma:sync` followed by `npm run
+  design-check` against an unmodified live site should produce a clean (or
+  near-clean, pending tolerance tuning) report — a first real run is
+  expected to surface mapping/tolerance issues to fix, not a bug in the
+  harness. (These stay unprefixed too, for the same reason as
+  `screenshots:xsMobile`, until a second program exists.)
