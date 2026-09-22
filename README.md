@@ -125,7 +125,7 @@ Runs every resolution above sequentially (now continues past a failed resolution
 Changing resolution ad hoc (without editing files):
 Bypass the npm scripts and call the runner directly with --device=:
 
-npx tsx src/screenshots/runner/run-all.ts --device=pTablet
+npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet
 Valid values: xlDesktop, lDesktop, Desktop, lTablet, pTablet, xsMobile (must match a name in RESOLUTIONS, see below).
 
 
@@ -133,14 +133,14 @@ Valid values: xlDesktop, lDesktop, Desktop, lTablet, pTablet, xsMobile (must mat
 Changing browser ad hoc:
 Add --browser=:
 
-npx tsx src/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
+npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
 Valid values: chrome, edge, firefox, safari.
 
 
 
 Permanently changing resolution / browser / headless-vs-headed:
 
-Everything is controlled from one file: src/utils/deviceBrowsers.ts.
+Everything is controlled from one file: src/programs/apotex-evdi/utils/deviceBrowsers.ts.
 
 To change...	Edit...
 Which resolutions exist	The RESOLUTIONS array (add/remove { name, width, height } entries)

@@ -25,9 +25,9 @@
 // Delete it whenever it's no longer needed.
 
 import { chromium } from '@playwright/test';
-import { LandingPage } from './src/pages/LandingPage';
-import { EligibilityPage } from './src/pages/EligibilityPage';
-import { PatientInformationPage } from './src/pages/PatientInformationPage';
+import { LandingPage } from './src/programs/apotex-evdi/pages/LandingPage';
+import { EligibilityPage } from './src/programs/apotex-evdi/pages/EligibilityPage';
+import { PatientInformationPage } from './src/programs/apotex-evdi/pages/PatientInformationPage';
 
 async function main() {
   const browser = await chromium.launch({ headless: false });

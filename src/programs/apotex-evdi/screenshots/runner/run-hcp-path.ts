@@ -5,6 +5,7 @@ import {
   DEFAULT_BROWSER,
   EXECUTION_MODE,
   PROGRAM_NAME,
+  SPINNER_SELECTOR,
   getBrowser,
   getResolution,
 } from '../../utils/deviceBrowsers';
@@ -42,7 +43,7 @@ export async function runHcpPath(
   } else {
     const runTimestamp = buildRunTimestamp();
     resetSequence();
-    context = createRunContext(PROGRAM_NAME, deviceType, runTimestamp);
+    context = createRunContext(PROGRAM_NAME, deviceType, runTimestamp, SPINNER_SELECTOR);
   }
 
   const browser = await launch(browserDef);

@@ -1,5 +1,5 @@
 // Single source of truth for device/browser/execution settings used by the
-// screenshot framework under src/screenshots/.
+// screenshot framework under src/programs/apotex-evdi/screenshots/.
 //
 // To change what gets captured, edit only this file:
 // - Resolutions: edit the RESOLUTIONS array below (name/width/height).
@@ -51,6 +51,11 @@ export type ExecutionMode = 'headless' | 'headed';
 export const EXECUTION_MODE: ExecutionMode = 'headed';
 
 export const PROGRAM_NAME = 'PortalAutomation';
+
+// The Apotex eVDI SPA's own route-transition overlay class, passed into the
+// shared screenshot engine's `createRunContext(...)` so it can wait for it
+// without the shared engine hardcoding any program-specific selector.
+export const SPINNER_SELECTOR = '.half-circle-spinner';
 
 export function getResolution(name: string): Resolution {
   const found = RESOLUTIONS.find((r) => r.name === name);
