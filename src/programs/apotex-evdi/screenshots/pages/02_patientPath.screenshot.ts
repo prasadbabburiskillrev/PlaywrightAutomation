@@ -7,7 +7,7 @@ import { NotEligiblePage } from '../../pages/NotEligiblePage';
 import { SuccessPage } from '../../pages/SuccessPage';
 import { EligibilityAnswers } from '../../testdata/types';
 import { generatePatientInformation } from '../../utils/DataGenerator';
-import { RunContext, capture } from '../../shared/screenshots-engine/screenshotHelper';
+import { RunContext, capture } from '../../../../shared/screenshots-engine/screenshotHelper';
 import { expandGenderDropdown, expandStateDropdown, closeDropdown } from '../core/dropdownExpander';
 
 const eligibleAnswers: EligibilityAnswers = {

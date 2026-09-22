@@ -9,8 +9,8 @@ import {
   getResolution,
 } from '../../utils/deviceBrowsers';
 import { config } from '../../config';
-import { RunContext, buildRunTimestamp, createRunContext, pdfOutputPath, resetSequence } from '../../shared/screenshots-engine/screenshotHelper';
-import { mergePngsToPdf } from '../../shared/screenshots-engine/pdfMerger';
+import { RunContext, buildRunTimestamp, createRunContext, pdfOutputPath, resetSequence } from '../../../../shared/screenshots-engine/screenshotHelper';
+import { mergePngsToPdf } from '../../../../shared/screenshots-engine/pdfMerger';
 import { captureHomePage } from '../pages/01_homePage.screenshot';
 import { captureHcpPath } from '../pages/03_hcpPath.screenshot';
 

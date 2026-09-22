@@ -5,8 +5,8 @@ import {
   getBrowser,
   getResolution,
 } from '../../utils/deviceBrowsers';
-import { RunContext, buildRunTimestamp, createRunContext, pdfOutputPath, resetSequence } from '../../shared/screenshots-engine/screenshotHelper';
-import { mergePngsToPdf } from '../../shared/screenshots-engine/pdfMerger';
+import { RunContext, buildRunTimestamp, createRunContext, pdfOutputPath, resetSequence } from '../../../../shared/screenshots-engine/screenshotHelper';
+import { mergePngsToPdf } from '../../../../shared/screenshots-engine/pdfMerger';
 import { runPatientPath } from './run-patient-path';
 import { runHcpPath } from './run-hcp-path';
 
