@@ -31,11 +31,13 @@ Output is written to (not under `src/`):
 
 ```
 screenshots/
-  PortalAutomation/
+  apotex-evdi/                 PROGRAM_KEY - keeps this program's output isolated from
+                                any other program's, regardless of PROGRAM_NAME below
     <runTimestamp>/            e.g. 2026-08-18_14-32-07
       <resolutionName>_<browserName>/
         PNG/all screenshots/*.png
-        PDF/PortalAutomation_<resolutionName>_<browserName>_<date>.pdf
+        PDF/PortalAutomation_<resolutionName>_<browserName>_<date>.pdf   PROGRAM_NAME -
+                                                                          cosmetic only
 ```
 
 ## Naming convention

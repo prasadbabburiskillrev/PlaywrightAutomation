@@ -43,11 +43,16 @@ npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet 
 ```
 
 Each run drives the Patient path fully, then the HCP path fully, using Chrome by
-default. Output goes to `screenshots/PortalAutomation/<timestamp>/<resolution>_<browser>/`
-(PNG + a merged PDF), and `screenshots/` is gitignored. All resolution/browser/headless
-config lives in one file: [src/programs/apotex-evdi/utils/deviceBrowsers.ts](src/programs/apotex-evdi/utils/deviceBrowsers.ts)
-(`RESOLUTIONS`, `BROWSERS`, `DEFAULT_BROWSER`, `EXECUTION_MODE`, `PROGRAM_NAME`). Adding a
-resolution also requires a matching `screenshots:<name>` script in `package.json`. See
+default. Output goes to `screenshots/apotex-evdi/<timestamp>/<resolution>_<browser>/`
+(PNG + a merged PDF), and `screenshots/` is gitignored. The `apotex-evdi` segment comes
+from `PROGRAM_KEY`, not `PROGRAM_NAME` — `PROGRAM_KEY` is what actually keeps two
+programs' output from colliding (it must match this program's `src/programs/<key>`
+folder name), while `PROGRAM_NAME` is just a cosmetic brand label used in PDF filenames
+and does not guarantee uniqueness on its own. All resolution/browser/headless config
+lives in one file: [src/programs/apotex-evdi/utils/deviceBrowsers.ts](src/programs/apotex-evdi/utils/deviceBrowsers.ts)
+(`RESOLUTIONS`, `BROWSERS`, `DEFAULT_BROWSER`, `EXECUTION_MODE`, `PROGRAM_NAME`,
+`PROGRAM_KEY`). Adding a resolution also requires a matching `screenshots:<name>` script
+in `package.json`. See
 [src/programs/apotex-evdi/screenshots/README.md](src/programs/apotex-evdi/screenshots/README.md)
 for the full convention (naming, sequence numbering, where to add new captures).
 
@@ -69,9 +74,12 @@ Onboarding a new, similar program: copy `src/programs/apotex-evdi/`, rename the 
 and its `.env` var prefix, edit locators/testdata to match the new site, and add one
 entry to `playwright.config.ts`'s `projects[]` array plus matching `package.json`
 script lines — the one accepted exception to pure copy-paste, consistent with the
-existing per-resolution `screenshots:<name>` script convention. Never re-implement
-`src/shared/` per program — if a program needs a fix there, it's fixed once, for every
-program.
+existing per-resolution `screenshots:<name>` script convention. **Also update
+`PROGRAM_KEY` in the copied `utils/deviceBrowsers.ts` to match the new folder name** —
+unlike `PROGRAM_NAME` (a cosmetic label), forgetting to change `PROGRAM_KEY` means the
+new program's screenshots silently land in the old program's output folder instead of
+their own. Never re-implement `src/shared/` per program — if a program needs a fix
+there, it's fixed once, for every program.
 
 `src/shared/screenshots-engine/` only ever holds code with **zero** domain knowledge of
 any one program (no locators, no field names, no site-specific quirks) — if you're

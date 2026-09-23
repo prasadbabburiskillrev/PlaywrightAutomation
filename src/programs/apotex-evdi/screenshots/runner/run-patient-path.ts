@@ -4,6 +4,7 @@ import {
   BrowserName,
   DEFAULT_BROWSER,
   EXECUTION_MODE,
+  PROGRAM_KEY,
   PROGRAM_NAME,
   SPINNER_SELECTOR,
   getBrowser,
@@ -43,7 +44,7 @@ export async function runPatientPath(
   } else {
     const runTimestamp = buildRunTimestamp();
     resetSequence();
-    context = createRunContext(PROGRAM_NAME, deviceType, runTimestamp, SPINNER_SELECTOR, resolution.name);
+    context = createRunContext(PROGRAM_NAME, PROGRAM_KEY, deviceType, runTimestamp, SPINNER_SELECTOR, resolution.name);
   }
 
   const browser = await launch(browserDef);

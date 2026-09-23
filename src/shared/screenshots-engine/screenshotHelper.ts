@@ -4,6 +4,10 @@ import * as path from 'path';
 
 export interface RunContext {
   programName: string;
+  // The program's src/programs/<programKey> folder name - partitions
+  // screenshot output (screenshots/<programKey>/...) so two programs can
+  // never collide, even if their cosmetic `programName` brand labels match.
+  programKey: string;
   runTimestamp: string;
   deviceType: string;
   // Plain Resolution.name (e.g. 'xsMobile'), distinct from `deviceType` which
@@ -30,18 +34,20 @@ export function buildRunTimestamp(date: Date = new Date()): string {
 
 export function createRunContext(
   programName: string,
+  programKey: string,
   deviceType: string,
   runTimestamp: string,
   spinnerSelector?: string,
   resolutionName?: string
 ): RunContext {
-  const baseDir = path.join(process.cwd(), 'screenshots', programName, runTimestamp, deviceType);
+  const baseDir = path.join(process.cwd(), 'screenshots', programKey, runTimestamp, deviceType);
   const pngDir = path.join(baseDir, 'PNG', 'all screenshots');
   const pdfDir = path.join(baseDir, 'PDF');
   fs.mkdirSync(pngDir, { recursive: true });
   fs.mkdirSync(pdfDir, { recursive: true });
   return {
     programName,
+    programKey,
     runTimestamp,
     deviceType,
     resolutionName: resolutionName ?? deviceType,

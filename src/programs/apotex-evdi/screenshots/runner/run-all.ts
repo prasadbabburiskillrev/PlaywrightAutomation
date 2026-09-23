@@ -1,6 +1,7 @@
 import {
   BrowserName,
   DEFAULT_BROWSER,
+  PROGRAM_KEY,
   PROGRAM_NAME,
   SPINNER_SELECTOR,
   getBrowser,
@@ -18,7 +19,7 @@ export async function runAll(resolutionName: string, browserName?: BrowserName):
   const runTimestamp = buildRunTimestamp();
 
   resetSequence();
-  const context: RunContext = createRunContext(PROGRAM_NAME, deviceType, runTimestamp, SPINNER_SELECTOR, resolution.name);
+  const context: RunContext = createRunContext(PROGRAM_NAME, PROGRAM_KEY, deviceType, runTimestamp, SPINNER_SELECTOR, resolution.name);
 
   let runError: unknown;
   try {
