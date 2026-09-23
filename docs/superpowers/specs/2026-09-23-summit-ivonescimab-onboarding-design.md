@@ -147,9 +147,11 @@ src/programs/summit-ivonescimab/
     PatientInformationPage.ts    copied from Apotex near-verbatim - identical field names confirmed live
     NotEligiblePage.ts           adapted once the not-eligible branch is confirmed live
     # PatientConsentPage.ts and SuccessPage.ts are NOT built this round - see Non-Goals
-  modules/
-    PatientEnrollmentModule.ts   landing -> eligibility -> patient info (stops there - see Non-Goals)
-  fixtures/index.ts              same fixture-wiring pattern as Apotex, wired to this program's pages/modules
+  # No modules/ this round: every test calls page objects directly (matching how
+  # Apotex's own non-happy-path tests already work without its module fixture) -
+  # a 2-step composed module with no test exercising it would be untested, unused
+  # code. Build PatientEnrollmentModule.ts alongside the Consent/Success follow-up.
+  fixtures/index.ts              same fixture-wiring pattern as Apotex, wired to this program's pages
   testdata/types.ts              this program's own EligibilityAnswers (5 fields) + PatientInformationData
                                   (identical shape to Apotex's - reuse the same field names for consistency)
   utils/
@@ -248,12 +250,11 @@ screenshots:summit-ivonescimab:xlDesktop / lDesktop / desktop / lTablet / pTable
 This is a breaking rename of Apotex's existing script names (called out
 explicitly, not silent) — done now specifically because CLAUDE.md's Global
 Constraints deferred this exact decision until a second program existed.
-`run-all-resolutions.ts` (the `screenshots:<program>:all` target) gains a way
-to resolve which program's `run-all.ts` to invoke; since each program's
-runner already lives at a fixed, predictable path
-(`src/programs/<key>/screenshots/runner/run-all.ts`), the resolutions runner
-can take the program key as an argument rather than needing per-program
-duplication.
+`run-all-resolutions.ts` (the `screenshots:<program>:all` target) gets its
+own self-contained copy per program, importing from that program's own
+`utils/deviceBrowsers` and `./run-all` — consistent with every other file in
+the program folder, and simpler than threading a `--program=` argument
+through shared code for what's a 3-line loop.
 
 ### G. Config wiring
 
@@ -288,12 +289,15 @@ duplicating the procedure inline.
 ### I. Testing scope
 
 One spec file, `src/programs/summit-ivonescimab/tests/patient-enrollment.spec.ts`,
-with 2 tests this round (the 3rd, full-happy-path test is Non-Goals — see
+with 3 tests this round (the 4th, full-happy-path test is Non-Goals — see
 above):
 1. Routes to the not-eligible page when a disqualifying eligibility answer
    is given (doesn't touch Patient Information at all, so it's unaffected by
    the live QA bug).
-2. Shows a validation error per required field when Patient Information is
+2. Continues to the Patient Information step with eligible answers (a plain
+   URL assertion — cheap, and strengthens confidence in the eligibility
+   branch independent of the validation-error test below).
+3. Shows a validation error per required field when Patient Information is
    submitted empty (only needs the client-side validation to fire, which it
    does immediately on submit attempt — doesn't require the transition past
    Patient Information to actually succeed).
@@ -305,7 +309,7 @@ suite... performs real submissions" note applies identically here).
 ## Verification
 
 - `tsc --noEmit` clean.
-- `npx playwright test --project=summit-ivonescimab` — both tests passing
+- `npx playwright test --project=summit-ivonescimab` — all 3 tests passing
   live.
 - `npm run screenshots:summit-ivonescimab:xsMobile` — Patient path captures
   complete (landing → eligibility → Patient Information states), PDF
