@@ -48,36 +48,62 @@ Key differences from Apotex:
   3. Currently live in the United States or its territories? (Yes = eligible)
   4. Currently have commercial insurance that covers BIVTUO? (Yes = eligible)
   5. Agree to terms and conditions? (Yes = eligible)
-- **Patient Information fields match Apotex almost field-for-field** (confirmed
-  live): First Name*, Last Name*, Date of Birth* (MM/DD/YYYY), Gender*
-  (combobox), Address Line 1*, Address Line 2, Zip Code*, City*, State*
-  (combobox), Mobile Phone* (000-000-0000), Home Phone, Email Address*. This
-  maps directly onto Apotex's existing `PatientInformationData` shape with no
-  data-model changes needed.
-- **Not yet inspected live:** the Patient Consent and Success pages (research
-  was stopped after Patient Information to keep scope contained). The 3-step
-  wizard list (`Patient Eligibility` / `Patient Information` / `Patient
-  Consent`) confirms a consent step exists; a Success/confirmation page is
-  assumed by analogy to Apotex and must be verified live during
-  implementation before `PatientConsentPage`/`SuccessPage` are built.
+- **Patient Information fields are a 100% field-for-field match with Apotex**
+  (confirmed live via `document.querySelectorAll('input, [role="combobox"]')`)
+  — identical underlying `name` attributes, not just similar visible labels:
+
+  | Visible label | `name` attribute | Notes |
+  |---|---|---|
+  | First Name* | `firstName` | plain text |
+  | Last Name* | `lastName` | plain text |
+  | Date of Birth* | `dateOfBirth` | MM/DD/YYYY |
+  | Gender* | `gender` | combobox + hidden proxy `input[type=hidden][name=gender]`, same Apotex quirk |
+  | Address Line 1* | `addressOne` | plain text |
+  | Address Line 2 | `addressTwo` | plain text, optional |
+  | Zip Code* | `zip` | plain text; triggers a `GET .../location/v1/City?zipCode=...` city-lookup call, doesn't override manual City entry |
+  | City* | `city` | plain text |
+  | State* | `state` | combobox + hidden proxy, **same virtualized dropdown**: confirmed live, 20 options initially rendered, `max-height: 304px`, `overflow-y: auto` — identical numbers to Apotex's documented quirk |
+  | Mobile Phone* | `patientPhone` | auto-formats to `(512) 555-0148` from a plain digits-and-dashes input |
+  | Home Phone | `patientHomePhone` | plain text, optional |
+  | Email Address* | `email` | plain text |
+
+  Gender combobox options confirmed live: `Male` / `Female` / `Prefer not to
+  answer` — identical to Apotex's `Gender` union type. This is strong
+  evidence both programs render the exact same underlying form component,
+  just restyled. **`PatientInformationPage.ts` and `dropdownExpander.ts` can
+  be copied from Apotex essentially verbatim** (import paths and class name
+  only) rather than rewritten.
+- **Spinner class confirmed identical.** `.half-circle-spinner` CSS rules
+  (including the `circle-1`/`circle-2` sub-selectors and keyframe animation
+  name) are present in Summit's loaded stylesheet, confirmed via
+  `document.styleSheets` inspection. `SPINNER_SELECTOR = '.half-circle-spinner'`
+  is reused as-is; no shared-engine change needed.
 - **Branding:** page title "BIVTUO With You", footer text "BIVTUO WITH YOU
   provides patients and their providers access and reimbursement support for
   BIVTUO... a registered trademark of Summit Therapeutics Inc."
-- **Spinner class unverified.** Apotex's shared-engine `spinnerSelector`
-  mechanism (added specifically so `src/shared/screenshots-engine/` never
-  hardcodes a program's overlay class) assumes each program supplies its own
-  selector. Whether Summit uses the same `.half-circle-spinner` class or a
-  different one is unconfirmed and must be checked live during
-  implementation — if it differs, that's exactly the case the mechanism was
-  built for; if screenshots turn out fine without a spinner wait at all,
-  `SPINNER_SELECTOR` can simply be omitted for this program.
+- **Live QA blocker found: Patient Information → Consent transition is
+  currently broken.** Filling every field with valid data (confirmed via
+  screenshot: no visible validation errors, all fields populated) and
+  clicking "Next" does not navigate — reproduced twice. Browser console
+  shows `Error on properties: FHERequestConsiderationQuestion` each time, and
+  `browser_network_requests` shows no request fired at all (the click fails
+  before any submission attempt), meaning this is a client-side JS error, not
+  a data-validation rejection or a server error. This looks like a real bug
+  in this QA build — possibly a required field/consideration-question that
+  isn't rendering — not something caused by the test data used. Per your
+  decision, this round stops at Patient Information; the Patient Consent and
+  Success pages have not been inspected live and are not built this round
+  (see Non-Goals).
 
 ## Goals
 
-- Scaffold `src/programs/summit-ivonescimab/` end to end for exactly one
-  flow: **Patient → Enroll in Co-pay Assistance**, mirroring Apotex's Patient
-  path in structure and test depth (not-eligible branch, validation-error
-  branch, happy path).
+- Scaffold `src/programs/summit-ivonescimab/` for the **Patient → Enroll in
+  Co-pay Assistance** flow, as far as the flow can currently go live: landing
+  role/action selection → Eligibility → Patient Information. The not-eligible
+  branch and the empty-submission validation-error branch are both fully
+  reachable and tested this round; the happy-path completion (Consent →
+  Success) is blocked by the live QA bug above and is explicit follow-up work
+  (see Non-Goals), not attempted with unverified guesses.
 - Wire it into `playwright.config.ts` (new `projects[]` entry),
   `package.json` (`test:summit-ivonescimab` + renamed/added screenshot
   scripts), and its own namespaced `.env` var.
@@ -97,6 +123,11 @@ Key differences from Apotex:
   for Summit Ivonescimab. These are real, well-scoped follow-up work using
   the same onboarding doc — not built now, to avoid taking on a
   second-full-test-suite-sized effort in one pass.
+- `PatientConsentPage`, `SuccessPage`, and the full happy-path "completes
+  enrollment successfully end to end" test — blocked by the live QA bug
+  described above (Patient Information → Consent transition does not work
+  with any data tried). Explicit follow-up once the bug is fixed or a
+  workaround is found; not built on unverified guesses about the real DOM.
 - Any change to Apotex eVDI's own page objects, tests, or testdata beyond the
   screenshot-script rename.
 - A parameterized single screenshot script (`--program=` flag) — rejected in
@@ -113,26 +144,28 @@ src/programs/summit-ivonescimab/
   pages/
     LandingPage.ts              rewritten: 3 role-cards, per-role action radiogroups
     EligibilityPage.ts           adapted: 5 questions, Summit's wording
-    PatientInformationPage.ts    adapted: same field shape as Apotex, selectors re-verified live
-    PatientConsentPage.ts        built after live verification of the Consent page
+    PatientInformationPage.ts    copied from Apotex near-verbatim - identical field names confirmed live
     NotEligiblePage.ts           adapted once the not-eligible branch is confirmed live
-    SuccessPage.ts               built after live verification of the Success page
+    # PatientConsentPage.ts and SuccessPage.ts are NOT built this round - see Non-Goals
   modules/
-    PatientEnrollmentModule.ts   landing -> eligibility -> patient info -> consent
+    PatientEnrollmentModule.ts   landing -> eligibility -> patient info (stops there - see Non-Goals)
   fixtures/index.ts              same fixture-wiring pattern as Apotex, wired to this program's pages/modules
   testdata/types.ts              this program's own EligibilityAnswers (5 fields) + PatientInformationData
                                   (identical shape to Apotex's - reuse the same field names for consistency)
   utils/
-    DataGenerator.ts             copied/adjusted only if Summit's field validation differs from Apotex's
-                                  (e.g. phone format, zip format) - confirm live, otherwise reuse as-is
+    DataGenerator.ts             copied from Apotex as-is unless a specific field rejects its generated
+                                  format during test-writing (confirmed live: phone auto-formats from a
+                                  plain "512-555-0148"-style input, same shape Apotex's generator produces)
     deviceBrowsers.ts            RESOLUTIONS/BROWSERS copied as-is; PROGRAM_NAME='BivtuoWithYou',
-                                  PROGRAM_KEY='summit-ivonescimab', SPINNER_SELECTOR verified live (see Goals)
+                                  PROGRAM_KEY='summit-ivonescimab', SPINNER_SELECTOR='.half-circle-spinner'
+                                  (confirmed identical live - see Site Research Findings)
   config/index.ts                reads SUMMIT_IVONESCIMAB_BASE_URL, same pattern as apotex-evdi/config
-  tests/patient-enrollment.spec.ts   same 3-test depth as Apotex's Patient describe block
+  tests/patient-enrollment.spec.ts   2 tests this round (not-eligible branch, validation-error branch) -
+                                      see Testing scope
   screenshots/
-    core/dropdownExpander.ts     only if Summit's State/Gender fields are virtualized comboboxes like
-                                  Apotex's - confirm live; may not be needed if it's a plain <select>-like combobox
-    pages/01_homePage.screenshot.ts, 02_patientPath.screenshot.ts
+    core/dropdownExpander.ts     copied from Apotex near-verbatim - confirmed live: same virtualized
+                                  State dropdown (20 options, 304px max-height)
+    pages/01_homePage.screenshot.ts, 02_patientPath.screenshot.ts (stops at Patient Information)
     runner/run-all.ts, run-patient-path.ts   (no run-hcp-path.ts this round - no HCP flow built)
   .env                            SUMMIT_IVONESCIMAB_BASE_URL=https://portal-qa.trialcard.com/summit/ivonescimab/
                                   (gitignored, not committed - matches existing convention)
@@ -184,19 +217,23 @@ behavior intercepts pointer events here too).
 
 ### D. Patient Information page
 
-Reuses Apotex's exact `PatientInformationData` field names (confirmed
-field-for-field match live) — no new type needed, just re-verify each
-field's actual selector on the Summit DOM during implementation (labels
-match; underlying `name`/`id` attributes are unconfirmed and may differ).
+Reuses Apotex's exact `PatientInformationData` field names and `field()`
+locator helper (`input[name="${name}"]:not([type="hidden"])`) — confirmed
+field-for-field match live, down to the exact `name` attributes (see table
+above), so this page object is a near-verbatim port rather than a rewrite.
 
-### E. Consent + Success pages
+### E. Consent + Success pages — not built this round
 
-Built after a live implementation-time check of both pages (not yet
-inspected during this design's research) — expected to mirror Apotex's
-shape (an agree-and-sign step, then a confirmation page) based on the
-3-step wizard list already confirmed, but the plan must include an explicit
-verification step before assuming the exact interaction pattern (e.g.
-Apotex's "type your name to sign" vs. a checkbox-only consent).
+Blocked by the live QA bug described in Site Research Findings: the
+Patient Information → Consent transition does not work with any data tried,
+reproduced twice, with no network request even firing (a client-side error,
+not a validation rejection). Building `PatientConsentPage`/`SuccessPage`
+against an unseen, unverified DOM would risk exactly the kind of guessed,
+untested page object this repo's existing pages avoid elsewhere. Follow-up
+work, once the bug is fixed or a workaround is found: re-run the live
+research from this design's Site Research Findings section, then build both
+pages the same way `PatientInformationPage` was built here — from confirmed
+live selectors, not assumptions.
 
 ### F. Screenshot script naming (applies to both programs)
 
@@ -239,28 +276,43 @@ what was decided, what to verify live). Explicitly calls out the two
 easy-to-forget, collision-prone spots this round's research and prior review
 surfaced: `PROGRAM_KEY` (output-folder isolation — a cosmetic-vs-structural
 distinction from `PROGRAM_NAME` that's easy to miss) and the
-`SUMMIT_IVONESCIMAB_BASE_URL`-style namespaced env var. `CLAUDE.md`'s
-existing short onboarding paragraph is trimmed to a pointer at this doc
-rather than duplicating the procedure inline.
+`SUMMIT_IVONESCIMAB_BASE_URL`-style namespaced env var. It also includes a
+section on what to do when the live site itself blocks progress (as happened
+here with the Patient Information → Consent transition): verify the blocker
+is reproducible and data-independent, scope the round's build down to what's
+actually reachable, and document the blocked pages/tests as explicit
+follow-up rather than guessing at unseen DOM. `CLAUDE.md`'s existing short
+onboarding paragraph is trimmed to a pointer at this doc rather than
+duplicating the procedure inline.
 
 ### I. Testing scope
 
 One spec file, `src/programs/summit-ivonescimab/tests/patient-enrollment.spec.ts`,
-matching Apotex's Patient describe block depth: routes to not-eligible on a
-disqualifying answer, shows a validation error per required field when
-submitted empty, completes enrollment successfully end to end with eligible
-answers. Live submissions on this real QA host are expected and accepted,
-consistent with the existing repo-wide convention (`CLAUDE.md`'s "Running the
-test suite... performs real submissions" note applies identically here).
+with 2 tests this round (the 3rd, full-happy-path test is Non-Goals — see
+above):
+1. Routes to the not-eligible page when a disqualifying eligibility answer
+   is given (doesn't touch Patient Information at all, so it's unaffected by
+   the live QA bug).
+2. Shows a validation error per required field when Patient Information is
+   submitted empty (only needs the client-side validation to fire, which it
+   does immediately on submit attempt — doesn't require the transition past
+   Patient Information to actually succeed).
+
+Live submissions on this real QA host are expected and accepted, consistent
+with the existing repo-wide convention (`CLAUDE.md`'s "Running the test
+suite... performs real submissions" note applies identically here).
 
 ## Verification
 
 - `tsc --noEmit` clean.
-- `npx playwright test --project=summit-ivonescimab` — all 3 tests passing
+- `npx playwright test --project=summit-ivonescimab` — both tests passing
   live.
 - `npm run screenshots:summit-ivonescimab:xsMobile` — Patient path captures
-  complete, PDF produced.
+  complete (landing → eligibility → Patient Information states), PDF
+  produced.
 - `npx playwright test --project=apotex-evdi` still passing (zero regression
   from the screenshot-script rename or shared-engine reuse).
-- `docs/onboarding-new-program.md` exists and is internally consistent with
-  what was actually built (no placeholder steps).
+- `docs/onboarding-new-program.md` exists, is internally consistent with what
+  was actually built (no placeholder steps), and documents the live-QA-bug
+  encounter as a worked example of "what to do when the live site itself
+  blocks you," not just the happy-path steps.
