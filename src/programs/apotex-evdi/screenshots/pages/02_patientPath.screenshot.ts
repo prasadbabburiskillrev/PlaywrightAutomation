@@ -75,7 +75,16 @@ export async function capturePatientPath(page: Page, context: RunContext): Promi
   await closeDropdown(page);
 
   await expandStateDropdown(page);
-  await capture(page, context, 'patient_patientInformation_stateExpanded');
+  // capHeightPx verified live for this specific capture (patient path's
+  // State dropdown): normal captures at Desktop/xsMobile topped out at
+  // 2946px/3002px, but the fully-expanded popup came out at 3966px/3812px -
+  // dead space below the footer. 3200 sits above both natural ceilings.
+  // Scoped to this call only - tune independently of the HCP path's own
+  // stateExpanded capture in 03_hcpPath.screenshot.ts, even though its
+  // current value happens to match.
+  await capture(page, context, 'patient_patientInformation_stateExpanded', {
+    capHeightPx: { Desktop: 3200, xsMobile: 3200 },
+  });
   await closeDropdown(page);
 
   await patientInfoPage.submit();

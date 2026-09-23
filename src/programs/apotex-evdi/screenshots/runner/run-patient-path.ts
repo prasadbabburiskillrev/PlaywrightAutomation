@@ -43,7 +43,7 @@ export async function runPatientPath(
   } else {
     const runTimestamp = buildRunTimestamp();
     resetSequence();
-    context = createRunContext(PROGRAM_NAME, deviceType, runTimestamp, SPINNER_SELECTOR);
+    context = createRunContext(PROGRAM_NAME, deviceType, runTimestamp, SPINNER_SELECTOR, resolution.name);
   }
 
   const browser = await launch(browserDef);
