@@ -3,8 +3,9 @@
 Standalone visual-documentation/regression screenshot tooling, separate from
 `src/programs/apotex-evdi/tests/`. It drives the existing
 `src/programs/apotex-evdi/pages`/`modules` Page Object Model through the Patient and HCP
-enrollment wizards and both roles' "Upload Documents" path at configurable resolutions, saving individually-named PNGs
-incrementally and merging each run into a single ordered PDF.
+enrollment wizards and both roles' "Upload Documents" path at configurable resolutions,
+saving individually-named PNGs incrementally and merging each run into a single ordered
+PDF.
 
 ## Folder layout
 
@@ -46,9 +47,9 @@ screenshots/
 
 Every capture is `<NN>_<path>_<page>_<state>.png`, e.g.
 `08_patient_patientInformation_validationError_10errors.png`. `NN` is a
-2-digit, zero-padded sequence number that increments continuously across
-`01_homePage` into `02_patientPath`/`03_hcpPath` and then `04_documentUploadPath` within one path run - it is
-tracked by a shared counter in `screenshotHelper.ts`, so inserting or
+2-digit, zero-padded sequence number that increments continuously across `01_homePage`
+into `02_patientPath`/`03_hcpPath` and then `04_documentUploadPath` within one path
+run - it is tracked by a shared counter in `screenshotHelper.ts`, so inserting or
 removing a capture never requires manually renumbering anything else.
 
 ## Adding a new page or state to capture

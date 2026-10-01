@@ -43,9 +43,9 @@ npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet 
 ```
 
 Each run drives the Patient path fully (enrollment, then document upload), then the HCP
-path fully (same), using Chrome by
-default. Output goes to `screenshots/apotex-evdi/<timestamp>/<resolution>_<browser>/`
-(PNG + a merged PDF), and `screenshots/` is gitignored. The `apotex-evdi` segment comes
+path fully (same), using Chrome by default. Output goes to
+`screenshots/apotex-evdi/<timestamp>/<resolution>_<browser>/` (PNG + a merged PDF), and
+`screenshots/` is gitignored. The `apotex-evdi` segment comes
 from `PROGRAM_KEY`, not `PROGRAM_NAME` — `PROGRAM_KEY` is what actually keeps two
 programs' output from colliding (it must match this program's `src/programs/<key>`
 folder name), while `PROGRAM_NAME` is just a cosmetic brand label used in PDF filenames
@@ -106,9 +106,9 @@ Full rationale: [docs/superpowers/specs/2026-09-03-multi-program-figma-design-va
   `DocumentUploadModule` (landing "Upload Documents" → upload page → success; one module
   taking a `PortalRole`, since Patient and HCP share the exact same upload page and flow).
 - `fixtures/index.ts` — the custom Playwright `test`, extending base `test` with one
-  fixture per page object plus `patientEnrollment`/`hcpEnrollment`/`documentUpload` module fixtures. All
-  specs import `test`/`expect` from `../fixtures`, never from `@playwright/test` directly
-  — this is the standard Playwright fixture pattern (recommended in Playwright's own
+  fixture per page object plus `patientEnrollment`/`hcpEnrollment`/`documentUpload`
+  module fixtures. All specs import `test`/`expect` from `../fixtures`, never from
+  `@playwright/test` directly — this is the standard Playwright fixture pattern (recommended in Playwright's own
   docs), giving a single place to add/change fixtures instead of touching every spec, and
   keeping page-object construction centralized rather than `new`'d inline per test. Page
   objects, screenshot helpers, and runner scripts are exempt from this rule — they may
@@ -172,8 +172,8 @@ since neither file has any Apotex-specific knowledge.
   to absorb it as a hard pass/fail gate. The screenshot framework instead attempts it
   once and skips that one capture with a warning if it fails.
 - Running the test suite or screenshot scripts performs real submissions against the
-  shared QA host, including actual enrollment records and uploaded documents — this is a live external system,
-  not a mock.
+  shared QA host, including actual enrollment records and uploaded documents — this is a
+  live external system, not a mock.
 - Each program's `BASE_URL` is namespaced per program (e.g. `APOTEX_EVDI_BASE_URL`, not a
   bare `BASE_URL`) in its own `.env` file, and `playwright.config.ts` loads every
   program's `.env` at startup. A bare, unnamespaced `BASE_URL` would silently collide the

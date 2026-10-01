@@ -24,6 +24,7 @@ for (const role of roles) {
       await documentUploadPage.addFiles(unsupportedTypeFile());
 
       await expect(documentUploadPage.invalidTypeError).toBeVisible();
+      await expect(documentUploadPage.selectedFile('unsupported.txt')).toHaveCount(0);
       await expect(documentUploadPage.removeFileButtons).toHaveCount(0);
     });
 
@@ -31,6 +32,7 @@ for (const role of roles) {
       await documentUploadPage.addFiles(oversizedFile());
 
       await expect(documentUploadPage.sizeLimitError).toBeVisible();
+      await expect(documentUploadPage.selectedFile('oversized.pdf')).toHaveCount(0);
       await expect(documentUploadPage.removeFileButtons).toHaveCount(0);
     });
 
@@ -50,7 +52,12 @@ for (const role of roles) {
       documentUpload,
       documentUploadPage,
       documentUploadSuccessPage,
-    }) => {
+    }, testInfo) => {
+      // beforeEach already spends ~10s on the landing page's diagnostic wait
+      // plus slow QA-host loads, leaving too little of the 90s default for the
+      // upload round trip (up to 60s) on a busy host - same reasoning as the
+      // enrollment specs' end-to-end tests.
+      testInfo.setTimeout(180_000);
       await documentUpload.uploadDocuments([SAMPLE_PDF, SAMPLE_PNG]);
 
       await documentUploadSuccessPage.expectVisible();
