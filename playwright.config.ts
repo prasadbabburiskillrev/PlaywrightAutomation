@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, 'src/programs/apotex-evdi/.env') });
+dotenv.config({ path: path.resolve(__dirname, 'src/programs/summit-ivonescimab/.env') });
 // Onboarding a new program: add another dotenv.config({ path: ... }) call
 // here pointing at that program's own .env file. Because every program's
 // base-URL var is namespaced (e.g. APOTEX_EVDI_BASE_URL), loading multiple
@@ -27,6 +28,14 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.APOTEX_EVDI_BASE_URL ?? 'https://portal-qa.trialcard.com/apotex/evdi/',
+      },
+    },
+    {
+      name: 'summit-ivonescimab',
+      testDir: './src/programs/summit-ivonescimab/tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.SUMMIT_IVONESCIMAB_BASE_URL ?? 'https://portal-qa.trialcard.com/summit/ivonescimab/',
       },
     },
     // Onboarding a new program: add one entry here, e.g.

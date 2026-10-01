@@ -6,6 +6,7 @@
   "scripts": {
     "test": "playwright test",
     "test:apotex-evdi": "playwright test --project=apotex-evdi",
+    "test:summit-ivonescimab": "playwright test --project=summit-ivonescimab",
     "test:headed": "playwright test --headed",
     "report": "playwright show-report",
     "screenshots:xlDesktop": "tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=xlDesktop",
