@@ -15,6 +15,7 @@ import { RunContext, buildRunTimestamp, createRunContext, pdfOutputPath, resetSe
 import { mergePngsToPdf } from '../../../../shared/screenshots-engine/pdfMerger';
 import { captureHomePage } from '../pages/01_homePage.screenshot';
 import { capturePatientPath } from '../pages/02_patientPath.screenshot';
+import { captureDocumentUploadPath } from '../pages/04_documentUploadPath.screenshot';
 
 function launch(browserDef: BrowserDefinition): Promise<Browser> {
   const headless = EXECUTION_MODE === 'headless';
@@ -71,6 +72,7 @@ export async function runPatientPath(
   try {
     await captureHomePage(page, context, 'patient');
     await capturePatientPath(page, context);
+    await captureDocumentUploadPath(page, context, 'patient');
   } catch (error) {
     captureError = error;
   } finally {

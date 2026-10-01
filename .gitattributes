@@ -1,0 +1,5 @@
+# Upload fixtures must reach the portal byte-for-byte; never line-ending-convert them.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
