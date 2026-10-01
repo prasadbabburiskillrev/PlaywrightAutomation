@@ -99,64 +99,139 @@ After installing, add scripts to `package.json`, e.g.:
 - **`skills/playwright-ai-mcp-tutor/SKILL.md`** — a Claude Code skill for this repo (currently empty, needs authoring).
 - **`rules/framework-rule-engine.json`** + **`scripts/rule-engine.js`** — a custom rule engine referenced by the framework (purpose to be defined once implemented).
 
+## Running the tests
 
-Commands to run — one per resolution:
-Run from the repo root (c:\Users\LENOVO\Documents\Playwright_Automation):
+All commands run from the repo root (`c:\Users\LENOVO\Documents\Playwright_Automation`).
 
+> **Live system:** both the e2e suite and the screenshot scripts run against the shared
+> QA host (`https://portal-qa.trialcard.com/apotex/evdi/`). They create real enrollment
+> records and upload real documents. Nothing is mocked.
 
-npm run screenshots:xlDesktop
-npm run screenshots:lDesktop
-npm run screenshots:desktop
-npm run screenshots:lTablet
-npm run screenshots:pTablet
-npm run screenshots:xsMobile
-Each runs the Patient path fully, then the HCP path fully, for that one resolution, using Chrome (the default browser) and headless mode. Output lands in screenshots/PortalAutomation/<timestamp>/<resolution>_chrome/ (PNG + PDF folders).
+### One-time setup
 
+```bash
+npm ci                      # install dependencies
+npx playwright install      # download the browsers Playwright drives
+```
 
+The base URL comes from `APOTEX_EVDI_BASE_URL` in `src/programs/apotex-evdi/.env`.
+If that file or variable is missing, it falls back to the QA host above.
 
+### E2E test suite (Playwright Test)
 
-All resolutions in one go:
+| Command | What it runs |
+| --- | --- |
+| `npm test` | Every program's suite (today only `apotex-evdi`), headless |
+| `npm run test:apotex-evdi` | Only the `apotex-evdi` project |
+| `npm run test:headed` | Every suite with a visible browser |
+| `npm run report` | Opens the HTML report from the last run (`playwright-report/`) |
 
-npm run screenshots:all
-Runs every resolution above sequentially (now continues past a failed resolution instead of aborting, per the review fix — check the console for a "Completed with failures for: ..." line at the end if any resolution had trouble).
+The `apotex-evdi` suite has 17 tests across three spec files in
+`src/programs/apotex-evdi/tests/`:
 
+| Spec file | Tests | Covers |
+| --- | --- | --- |
+| `patient-enrollment.spec.ts` | 4 | Not-eligible route, eligible → Patient Information, 10-field validation, full enrollment to success |
+| `hcp-enrollment.spec.ts` | 3 | Not-eligible route, 9-field validation, full enrollment to success |
+| `document-upload.spec.ts` | 10 (5 per role) | Patient + HCP "Upload Documents": empty submit, invalid file type, over 10 MB, remove a file, real upload to success |
 
+Run a subset:
 
-Changing resolution ad hoc (without editing files):
-Bypass the npm scripts and call the runner directly with --device=:
+```bash
+# one spec file
+npx playwright test src/programs/apotex-evdi/tests/document-upload.spec.ts
 
+# tests whose title matches a pattern
+npx playwright test -g "uploads documents successfully"
+
+# one role's upload tests only
+npx playwright test -g "HCP document upload"
+
+# watch it run in a real browser
+npx playwright test src/programs/apotex-evdi/tests/document-upload.spec.ts --headed
+
+# step through interactively with the Playwright Inspector
+npx playwright test -g "removes one" --debug
+```
+
+Things to expect:
+
+- **It's slow by design.** Tests run one at a time (`workers: 1`), and every landing-page
+  "Next" click is preceded by an intentional 10s wait. The full suite takes roughly
+  20 minutes. The default per-test timeout is 90s; end-to-end tests raise their own.
+- **HCP end-to-end retries are expected.** The HCP "completes enrollment successfully"
+  test has a known, escalated app bug on its final Submit (about a 1-in-3 pass rate
+  per attempt). Its describe block allows 5 retries, so a "flaky" result there is
+  normal. See the comment in `hcp-enrollment.spec.ts`.
+- Upload test files live in `src/programs/apotex-evdi/testdata/uploads/` (sample PDF
+  and PNG). The invalid-type and oversize files are generated in memory.
+
+### Screenshot framework (visual documentation)
+
+A separate tool, not part of `npm test`. Each run walks the **Patient path** (landing →
+eligibility → patient information → consent → success, then the document-upload
+path), then the **HCP path** (same, without consent). It saves a numbered PNG of every
+state and merges them into one PDF. One full run produces about 40 screenshots.
+
+One resolution per command (Chrome, **headed** by default):
+
+| Command | Resolution | Viewport |
+| --- | --- | --- |
+| `npm run screenshots:xlDesktop` | xlDesktop | 1920×1080 |
+| `npm run screenshots:lDesktop` | lDesktop | 1440×1080 |
+| `npm run screenshots:desktop` | Desktop | 1024×1080 |
+| `npm run screenshots:lTablet` | lTablet | 1280×800 |
+| `npm run screenshots:pTablet` | pTablet | 768×1024 |
+| `npm run screenshots:xsMobile` | xsMobile | 375×1080 |
+| `npm run screenshots:all` | every resolution above, one after another | |
+
+`screenshots:all` keeps going if one resolution fails. Look for a
+`Completed with failures for: ...` line at the end of the console output.
+
+Ad hoc, without editing any files (call the runner directly):
+
+```bash
+# any resolution
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet
-Valid values: xlDesktop, lDesktop, Desktop, lTablet, pTablet, xsMobile (must match a name in RESOLUTIONS, see below).
 
-
-
-Changing browser ad hoc:
-Add --browser=:
-
+# any resolution + browser
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
-Valid values: chrome, edge, firefox, safari.
 
+# only one role's path (still includes that role's document-upload captures)
+npx tsx src/programs/apotex-evdi/screenshots/runner/run-patient-path.ts --device=xsMobile
+npx tsx src/programs/apotex-evdi/screenshots/runner/run-hcp-path.ts --device=xsMobile
+```
 
+- `--device=`: `xlDesktop`, `lDesktop`, `Desktop`, `lTablet`, `pTablet`, `xsMobile`
+  (case-sensitive; must match a name in `RESOLUTIONS`). Defaults to `xlDesktop` if omitted.
+- `--browser=`: `chrome`, `edge`, `firefox`, `safari`. Defaults to `DEFAULT_BROWSER`.
 
-Permanently changing resolution / browser / headless-vs-headed:
+**Where output goes** (`screenshots/` is gitignored):
 
-Everything is controlled from one file: src/programs/apotex-evdi/utils/deviceBrowsers.ts.
-
-To change...	Edit...
-Which resolutions exist	The RESOLUTIONS array (add/remove { name, width, height } entries)
-Which browsers exist	The BROWSERS array (add/remove { name, engine, channel? } entries)
-Default browser used by the npm scripts	DEFAULT_BROWSER constant
-Headless vs headed	EXECUTION_MODE constant ('headless' or 'headed')
-Output folder program name	PROGRAM_NAME constant
-If you add a new resolution name, also add a matching screenshots:<name> line to package.json's scripts block (copy an existing one and swap the --device= value).
-
-
-
-
-
-Where output goes
-
-screenshots/PortalAutomation/<runTimestamp>/<resolution>_<browser>/
-  PNG/all screenshots/*.png
+```
+screenshots/apotex-evdi/<runTimestamp>/<resolution>_<browser>/
+  PNG/all screenshots/NN_<role>_<page>_<state>.png     e.g. 19_patient_documentUpload_fileTooLarge.png
   PDF/PortalAutomation_<resolution>_<browser>_<date>.pdf
-One heads-up carried over from the final review: these scripts perform real submissions against the shared QA host (portal-qa.trialcard.com), including actual enrollment records — same as the existing test suite already does, not something new introduced here.
+```
+
+**Permanent settings** all live in `src/programs/apotex-evdi/utils/deviceBrowsers.ts`:
+
+| To change... | Edit... |
+| --- | --- |
+| Which resolutions exist | the `RESOLUTIONS` array (`{ name, width, height }`) |
+| Which browsers exist | the `BROWSERS` array (`{ name, engine, channel? }`) |
+| Default browser for the npm scripts | `DEFAULT_BROWSER` |
+| Headless vs headed | `EXECUTION_MODE` (`'headless'` or `'headed'`; currently `'headed'`) |
+| Output folder (`screenshots/<PROGRAM_KEY>/`) | `PROGRAM_KEY`; must match the program's `src/programs/<key>` folder |
+| PDF filename label | `PROGRAM_NAME` (cosmetic only) |
+
+If you add a resolution, also add a matching `screenshots:<name>` script to
+`package.json` (copy an existing line and change `--device=`).
+
+Known limitation: the HCP path's final Submit hits the same app bug as the e2e test.
+The screenshot run tries it once. If it fails, the run skips only the
+`hcp_success_default` capture, logs a warning, and continues with the HCP upload path.
+Re-run if you need that capture.
+
+See `src/programs/apotex-evdi/screenshots/README.md` for naming conventions and how to
+add new captures.
