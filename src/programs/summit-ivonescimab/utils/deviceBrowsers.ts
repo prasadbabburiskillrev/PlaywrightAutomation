@@ -11,8 +11,8 @@
 // - Headless vs headed: change EXECUTION_MODE below.
 // - Default browser used by the per-resolution npm scripts: change
 //   DEFAULT_BROWSER below.
-// - Output folder program name (screenshots/<PROGRAM_KEY>/...): change
-//   PROGRAM_NAME below.
+// - Output folder (screenshots/<PROGRAM_KEY>/...): change PROGRAM_KEY below;
+//   PROGRAM_NAME below only relabels the PDF filename.
 // - Onboarding a new program (copying this whole folder): PROGRAM_KEY MUST
 //   be changed to that program's own src/programs/<key> folder name. It's
 //   what actually keeps two programs' screenshot output directories from

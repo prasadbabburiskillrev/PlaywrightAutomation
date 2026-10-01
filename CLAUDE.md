@@ -4,10 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-TypeScript + Playwright end-to-end test suite for the Apotex eVDI enrollment portal
-(`https://portal-qa.trialcard.com/apotex/evdi/`, a Vuetify SPA), plus a separate
-screenshot/visual-documentation tool that drives the same page objects. There is no
-application source in this repo — this is a test/automation framework only.
+TypeScript + Playwright end-to-end test suites for TrialCard copay enrollment portals
+(Vuetify SPAs on the shared QA host `https://portal-qa.trialcard.com/`): the Apotex
+eVDI portal (`/apotex/evdi/`) and the Summit Ivonescimab portal (`/summit/ivonescimab/`).
+Each also has a separate screenshot/visual-documentation tool that drives the same page
+objects. There is no application source in this repo — this is a test/automation
+framework only.
 
 The repo is structured to support more than one similar program (site) side by side —
 see "Multi-program layout" below. Today there are two programs: `apotex-evdi` (full
@@ -109,7 +111,9 @@ Full rationale: [docs/superpowers/specs/2026-09-03-multi-program-figma-design-va
 
 ## Architecture
 
-**Page Object Model with a business-flow layer on top**, all under `src/programs/apotex-evdi/`:
+**Page Object Model with a business-flow layer on top**, one copy per program under
+`src/programs/<key>/`. `apotex-evdi` is the full reference shape, described below;
+`summit-ivonescimab`'s differences follow the list.
 
 - `pages/` — one class per screen, locators + low-level actions only
   (`LandingPage`, `EligibilityPage`, `PatientInformationPage`, `PatientConsentPage`,
@@ -144,18 +148,28 @@ Full rationale: [docs/superpowers/specs/2026-09-03-multi-program-figma-design-va
 - `src/api/` (repo root, outside any program) is scaffolded but currently empty (no API
   layer implemented yet).
 
+`summit-ivonescimab` follows the same layout with a smaller scope: Patient role only
+(`PortalRole = 'patient'`, `PortalAction = 'enrollCopay'`); pages `LandingPage`,
+`EligibilityPage`, `NotEligiblePage`, `PatientInformationPage`; no `modules/` folder
+(no multi-page flow is composed yet, since enrollment stops at Patient Information); page
+fixtures only; and `config/index.ts` reads `SUMMIT_IVONESCIMAB_BASE_URL`. Its landing page
+shows one card per role, each with its own radiogroup, and the action labels are unique,
+so `selectRoleAction` needs no radiogroup-index scoping (unlike Apotex). Locators,
+question order, and error counts are Summit's own and were verified live; don't assume
+Apotex's values carry over.
+
 Index barrel files (`<folder>/index.ts`) re-export everything in that folder and are the
 intended import path for consumers outside that folder — update them when adding a file.
 
 ### The screenshot framework is a second consumer of the same POM
 
-`src/programs/apotex-evdi/screenshots/` never adds its own locators — it only calls
+Each program's `screenshots/` folder (e.g. `src/programs/apotex-evdi/screenshots/`) never adds its own locators — it only calls
 existing `pages`/`modules` methods and adds reusable interaction helpers (e.g. dropdown
 expansion) under its own `screenshots/core/`. The actual capture engine —
 `screenshotHelper.ts` (owns the shared `RunContext`: output dirs, PNG manifest,
 auto-incrementing sequence number across pages within one run) and `pdfMerger.ts`
 (merges the manifest into one ordered PDF) — lives in `src/shared/screenshots-engine/`,
-since neither file has any Apotex-specific knowledge.
+since neither file has any program-specific knowledge.
 
 ## Non-obvious behavior to know before editing tests/pages
 
