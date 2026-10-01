@@ -10,7 +10,10 @@ screenshot/visual-documentation tool that drives the same page objects. There is
 application source in this repo — this is a test/automation framework only.
 
 The repo is structured to support more than one similar program (site) side by side —
-see "Multi-program layout" below. Today there is exactly one program, `apotex-evdi`.
+see "Multi-program layout" below. Today there are two programs: `apotex-evdi` (full
+Patient + HCP enrollment) and `summit-ivonescimab` (Patient enrollment up to Patient
+Information — see [docs/onboarding-new-program.md](docs/onboarding-new-program.md) for
+what's follow-up).
 
 ## Commands
 
@@ -78,18 +81,19 @@ src/
     apotex-evdi/                 everything specific to this one site
       pages/  modules/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
       .env                       APOTEX_EVDI_BASE_URL (program-specific secret/config)
+    summit-ivonescimab/          Patient enrollment flow only so far (see
+                                  docs/onboarding-new-program.md for what's follow-up)
+      pages/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
+      .env                       SUMMIT_IVONESCIMAB_BASE_URL
 ```
 
-Onboarding a new, similar program: copy `src/programs/apotex-evdi/`, rename the folder
-and its `.env` var prefix, edit locators/testdata to match the new site, and add one
-entry to `playwright.config.ts`'s `projects[]` array plus matching `package.json`
-script lines — the one accepted exception to pure copy-paste, consistent with the
-existing per-resolution `screenshots:<name>` script convention. **Also update
-`PROGRAM_KEY` in the copied `utils/deviceBrowsers.ts` to match the new folder name** —
-unlike `PROGRAM_NAME` (a cosmetic label), forgetting to change `PROGRAM_KEY` means the
-new program's screenshots silently land in the old program's output folder instead of
-their own. Never re-implement `src/shared/` per program — if a program needs a fix
-there, it's fixed once, for every program.
+Onboarding a new, similar program: see
+[docs/onboarding-new-program.md](docs/onboarding-new-program.md) for the full,
+validated procedure (research the live site first, pick `PROGRAM_KEY` and a namespaced
+`.env` var upfront, scaffold, wire into `playwright.config.ts`/`package.json`, build the
+screenshot framework, verify zero regression on every other program). Never
+re-implement `src/shared/` per program — if a program needs a fix there, it's fixed
+once, for every program.
 
 `src/shared/screenshots-engine/` only ever holds code with **zero** domain knowledge of
 any one program (no locators, no field names, no site-specific quirks) — if you're
