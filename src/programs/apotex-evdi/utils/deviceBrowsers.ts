@@ -1,5 +1,5 @@
 // Single source of truth for device/browser/execution settings used by the
-// screenshot framework under src/screenshots/.
+// screenshot framework under src/programs/apotex-evdi/screenshots/.
 //
 // To change what gets captured, edit only this file:
 // - Resolutions: edit the RESOLUTIONS array below (name/width/height).
@@ -13,6 +13,11 @@
 //   DEFAULT_BROWSER below.
 // - Output folder program name (screenshots/<PROGRAM_NAME>/...): change
 //   PROGRAM_NAME below.
+// - Onboarding a new program (copying this whole folder): PROGRAM_KEY MUST
+//   be changed to that program's own src/programs/<key> folder name. It's
+//   what actually keeps two programs' screenshot output directories from
+//   colliding - PROGRAM_NAME alone is just a cosmetic label used in PDF
+//   filenames and does not guarantee uniqueness.
 
 export interface Resolution {
   name: string;
@@ -51,6 +56,17 @@ export type ExecutionMode = 'headless' | 'headed';
 export const EXECUTION_MODE: ExecutionMode = 'headed';
 
 export const PROGRAM_NAME = 'PortalAutomation';
+
+// Matches this program's own src/programs/<PROGRAM_KEY> folder name. Used
+// only to partition screenshot output (screenshots/<PROGRAM_KEY>/...) so a
+// second program's captures can never land in this one's folder even if its
+// PROGRAM_NAME brand label was copy-pasted without changing.
+export const PROGRAM_KEY = 'apotex-evdi';
+
+// The Apotex eVDI SPA's own route-transition overlay class, passed into the
+// shared screenshot engine's `createRunContext(...)` so it can wait for it
+// without the shared engine hardcoding any program-specific selector.
+export const SPINNER_SELECTOR = '.half-circle-spinner';
 
 export function getResolution(name: string): Resolution {
   const found = RESOLUTIONS.find((r) => r.name === name);

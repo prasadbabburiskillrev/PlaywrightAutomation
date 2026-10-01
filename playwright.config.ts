@@ -2,10 +2,14 @@ import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, 'src/programs/apotex-evdi/.env') });
+// Onboarding a new program: add another dotenv.config({ path: ... }) call
+// here pointing at that program's own .env file. Because every program's
+// base-URL var is namespaced (e.g. APOTEX_EVDI_BASE_URL), loading multiple
+// programs' .env files into this one process is safe — dotenv won't
+// override a key that's already set, and there's no shared key to collide.
 
 export default defineConfig({
-  testDir: './src/tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -13,14 +17,26 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   timeout: 90_000,
   use: {
-    baseURL: process.env.BASE_URL ?? 'https://portal-qa.trialcard.com/apotex/evdi/',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'apotex-evdi',
+      testDir: './src/programs/apotex-evdi/tests',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.APOTEX_EVDI_BASE_URL ?? 'https://portal-qa.trialcard.com/apotex/evdi/',
+      },
     },
+    // Onboarding a new program: add one entry here, e.g.
+    // {
+    //   name: '<new-program>',
+    //   testDir: './src/programs/<new-program>/tests',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     baseURL: process.env.<NEW_PROGRAM>_BASE_URL ?? '<new-program-default-url>',
+    //   },
+    // },
   ],
 });
