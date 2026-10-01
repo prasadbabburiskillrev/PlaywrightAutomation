@@ -11,7 +11,7 @@
 // - Headless vs headed: change EXECUTION_MODE below.
 // - Default browser used by the per-resolution npm scripts: change
 //   DEFAULT_BROWSER below.
-// - Output folder program name (screenshots/<PROGRAM_NAME>/...): change
+// - Output folder program name (screenshots/<PROGRAM_KEY>/...): change
 //   PROGRAM_NAME below.
 // - Onboarding a new program (copying this whole folder): PROGRAM_KEY MUST
 //   be changed to that program's own src/programs/<key> folder name. It's

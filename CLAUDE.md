@@ -12,8 +12,9 @@ application source in this repo — this is a test/automation framework only.
 The repo is structured to support more than one similar program (site) side by side —
 see "Multi-program layout" below. Today there are two programs: `apotex-evdi` (full
 Patient + HCP enrollment) and `summit-ivonescimab` (Patient enrollment up to Patient
-Information — see [docs/onboarding-new-program.md](docs/onboarding-new-program.md) for
-what's follow-up).
+Information — see
+[docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md](docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md)
+for what's follow-up).
 
 ## Commands
 
@@ -82,7 +83,8 @@ src/
       pages/  modules/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
       .env                       APOTEX_EVDI_BASE_URL (program-specific secret/config)
     summit-ivonescimab/          Patient enrollment flow only so far (see
-                                  docs/onboarding-new-program.md for what's follow-up)
+                                  docs/superpowers/specs/2026-09-23-summit-ivonescimab-
+                                  onboarding-design.md for what's follow-up)
       pages/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
       .env                       SUMMIT_IVONESCIMAB_BASE_URL
 ```

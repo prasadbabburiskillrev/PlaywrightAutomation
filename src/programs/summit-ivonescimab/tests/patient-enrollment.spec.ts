@@ -1,6 +1,5 @@
 import { test, expect } from '../fixtures';
 import { EligibilityAnswers } from '../testdata/types';
-import { generatePatientInformation } from '../utils/DataGenerator';
 
 const eligibleAnswers: EligibilityAnswers = {
   enrolledInFederalOrStateProgram: false,

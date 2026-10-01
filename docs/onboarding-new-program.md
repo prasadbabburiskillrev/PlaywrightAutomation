@@ -93,7 +93,7 @@ When this happens:
    near-verbatim wherever live research confirmed identical selectors/
    behavior; rewrite (don't locator-tweak) wherever the structure is
    actually different.
-5. **Wire it into shared config**: add a second `dotenv.config(...)` call
+5. **Wire it into shared config**: add another `dotenv.config(...)` call
    and a `projects[]` entry in `playwright.config.ts` (the pattern and its
    own onboarding comment already anticipate this); add
    `test:<program-key>` to `package.json`.

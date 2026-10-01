@@ -63,7 +63,7 @@ removing a capture never requires manually renumbering anything else.
 
 Add an entry to the `RESOLUTIONS` array in
 `src/programs/apotex-evdi/utils/deviceBrowsers.ts`, then add a matching
-`screenshots:<name>` npm script in `package.json` pointing at `run-all.ts --device=<name>`.
+`screenshots:apotex-evdi:<name>` npm script in `package.json` pointing at `run-all.ts --device=<name>`.
 
 ## Adding a new browser
 

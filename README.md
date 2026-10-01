@@ -118,7 +118,7 @@ npm run screenshots:summit-ivonescimab:desktop
 npm run screenshots:summit-ivonescimab:lTablet
 npm run screenshots:summit-ivonescimab:pTablet
 npm run screenshots:summit-ivonescimab:xsMobile
-Each runs that program's capture flow fully for that one resolution, using Chrome (the default browser) and headless mode. apotex-evdi's flow is the Patient path fully, then the HCP path fully; summit-ivonescimab's flow is currently the Patient path only, up to Patient Information (see src/programs/summit-ivonescimab/screenshots/README.md for why). Output lands in screenshots/<PROGRAM_KEY>/<timestamp>/<resolution>_chrome/ (PNG + PDF folders) — PROGRAM_KEY is apotex-evdi or summit-ivonescimab respectively.
+Each runs that program's capture flow fully for that one resolution, using Chrome (the default browser) and headed mode (both programs' EXECUTION_MODE defaults to 'headed' — see each program's utils/deviceBrowsers.ts). apotex-evdi's flow is the Patient path fully, then the HCP path fully; summit-ivonescimab's flow is currently the Patient path only, up to Patient Information (see src/programs/summit-ivonescimab/screenshots/README.md for why). Output lands in screenshots/<PROGRAM_KEY>/<timestamp>/<resolution>_chrome/ (PNG + PDF folders) — PROGRAM_KEY is apotex-evdi or summit-ivonescimab respectively.
 
 
 
@@ -158,7 +158,7 @@ Which resolutions exist	The RESOLUTIONS array (add/remove { name, width, height 
 Which browsers exist	The BROWSERS array (add/remove { name, engine, channel? } entries)
 Default browser used by the npm scripts	DEFAULT_BROWSER constant
 Headless vs headed	EXECUTION_MODE constant ('headless' or 'headed')
-Output folder program name	PROGRAM_NAME constant
+Output folder program name	PROGRAM_KEY constant
 If you add a new resolution name, also add a matching screenshots:<program>:<name> line to package.json's scripts block (copy an existing one and swap the --device= value).
 
 
