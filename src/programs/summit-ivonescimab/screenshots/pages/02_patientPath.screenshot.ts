@@ -53,12 +53,13 @@ export async function capturePatientPath(page: Page, context: RunContext): Promi
   await closeDropdown(page);
 
   await expandStateDropdown(page);
-  // No capHeightPx yet, unlike Apotex's equivalent capture - Apotex's exact
+  // No capHeightPx here, unlike Apotex's equivalent capture - Apotex's exact
   // px values (2946/3200/3966 etc.) were tuned from ITS OWN natural page
   // heights and must not be assumed to transfer to a differently-branded
-  // page. Step 8 below checks this capture's actual dimensions live and adds
-  // capHeightPx here (following screenshotHelper.ts's CaptureHeightOptions
-  // pattern) only if dead space is actually observed.
+  // page. Verified live (xsMobile, 2026-10-01): this capture came out at
+  // 2404px, which is not even the tallest capture in the run (10_..._10errors
+  // was 2596px) - no dead space below the footer here, so no capHeightPx
+  // (following screenshotHelper.ts's CaptureHeightOptions pattern) is needed.
   await capture(page, context, 'patient_patientInformation_stateExpanded');
   await closeDropdown(page);
 

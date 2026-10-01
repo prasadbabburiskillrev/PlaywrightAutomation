@@ -100,25 +100,34 @@ After installing, add scripts to `package.json`, e.g.:
 - **`rules/framework-rule-engine.json`** + **`scripts/rule-engine.js`** — a custom rule engine referenced by the framework (purpose to be defined once implemented).
 
 
-Commands to run — one per resolution:
+Commands to run — one per resolution, per program (scripts are program-prefixed:
+screenshots:<program>:<resolution>):
 Run from the repo root (c:\Users\LENOVO\Documents\Playwright_Automation):
 
 
-npm run screenshots:xlDesktop
-npm run screenshots:lDesktop
-npm run screenshots:desktop
-npm run screenshots:lTablet
-npm run screenshots:pTablet
-npm run screenshots:xsMobile
-Each runs the Patient path fully, then the HCP path fully, for that one resolution, using Chrome (the default browser) and headless mode. Output lands in screenshots/PortalAutomation/<timestamp>/<resolution>_chrome/ (PNG + PDF folders).
+npm run screenshots:apotex-evdi:xlDesktop
+npm run screenshots:apotex-evdi:lDesktop
+npm run screenshots:apotex-evdi:desktop
+npm run screenshots:apotex-evdi:lTablet
+npm run screenshots:apotex-evdi:pTablet
+npm run screenshots:apotex-evdi:xsMobile
+
+npm run screenshots:summit-ivonescimab:xlDesktop
+npm run screenshots:summit-ivonescimab:lDesktop
+npm run screenshots:summit-ivonescimab:desktop
+npm run screenshots:summit-ivonescimab:lTablet
+npm run screenshots:summit-ivonescimab:pTablet
+npm run screenshots:summit-ivonescimab:xsMobile
+Each runs that program's capture flow fully for that one resolution, using Chrome (the default browser) and headless mode. apotex-evdi's flow is the Patient path fully, then the HCP path fully; summit-ivonescimab's flow is currently the Patient path only, up to Patient Information (see src/programs/summit-ivonescimab/screenshots/README.md for why). Output lands in screenshots/<PROGRAM_KEY>/<timestamp>/<resolution>_chrome/ (PNG + PDF folders) — PROGRAM_KEY is apotex-evdi or summit-ivonescimab respectively.
 
 
 
 
-All resolutions in one go:
+All resolutions in one go (per program):
 
-npm run screenshots:all
-Runs every resolution above sequentially (now continues past a failed resolution instead of aborting, per the review fix — check the console for a "Completed with failures for: ..." line at the end if any resolution had trouble).
+npm run screenshots:apotex-evdi:all
+npm run screenshots:summit-ivonescimab:all
+Runs every resolution above sequentially for that program (continues past a failed resolution instead of aborting, per the review fix — check the console for a "Completed with failures for: ..." line at the end if any resolution had trouble).
 
 
 
@@ -126,6 +135,7 @@ Changing resolution ad hoc (without editing files):
 Bypass the npm scripts and call the runner directly with --device=:
 
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet
+npx tsx src/programs/summit-ivonescimab/screenshots/runner/run-all.ts --device=pTablet
 Valid values: xlDesktop, lDesktop, Desktop, lTablet, pTablet, xsMobile (must match a name in RESOLUTIONS, see below).
 
 
@@ -134,13 +144,14 @@ Changing browser ad hoc:
 Add --browser=:
 
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
+npx tsx src/programs/summit-ivonescimab/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
 Valid values: chrome, edge, firefox, safari.
 
 
 
 Permanently changing resolution / browser / headless-vs-headed:
 
-Everything is controlled from one file: src/programs/apotex-evdi/utils/deviceBrowsers.ts.
+Everything is controlled from one file per program: src/programs/apotex-evdi/utils/deviceBrowsers.ts or src/programs/summit-ivonescimab/utils/deviceBrowsers.ts.
 
 To change...	Edit...
 Which resolutions exist	The RESOLUTIONS array (add/remove { name, width, height } entries)
@@ -148,7 +159,7 @@ Which browsers exist	The BROWSERS array (add/remove { name, engine, channel? } e
 Default browser used by the npm scripts	DEFAULT_BROWSER constant
 Headless vs headed	EXECUTION_MODE constant ('headless' or 'headed')
 Output folder program name	PROGRAM_NAME constant
-If you add a new resolution name, also add a matching screenshots:<name> line to package.json's scripts block (copy an existing one and swap the --device= value).
+If you add a new resolution name, also add a matching screenshots:<program>:<name> line to package.json's scripts block (copy an existing one and swap the --device= value).
 
 
 
@@ -156,7 +167,8 @@ If you add a new resolution name, also add a matching screenshots:<name> line to
 
 Where output goes
 
-screenshots/PortalAutomation/<runTimestamp>/<resolution>_<browser>/
+screenshots/<PROGRAM_KEY>/<runTimestamp>/<resolution>_<browser>/
   PNG/all screenshots/*.png
-  PDF/PortalAutomation_<resolution>_<browser>_<date>.pdf
+  PDF/<PROGRAM_NAME>_<resolution>_<browser>_<date>.pdf
+PROGRAM_KEY (apotex-evdi, summit-ivonescimab) keeps each program's output isolated; PROGRAM_NAME (e.g. PortalAutomation, BivtuoWithYou) is just a cosmetic label baked into the PDF filename.
 One heads-up carried over from the final review: these scripts perform real submissions against the shared QA host (portal-qa.trialcard.com), including actual enrollment records — same as the existing test suite already does, not something new introduced here.
