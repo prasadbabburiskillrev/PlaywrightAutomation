@@ -3,7 +3,7 @@
 Standalone visual-documentation/regression screenshot tooling, separate from
 `src/programs/apotex-evdi/tests/`. It drives the existing
 `src/programs/apotex-evdi/pages`/`modules` Page Object Model through the Patient and HCP
-enrollment wizards at configurable resolutions, saving individually-named PNGs
+enrollment wizards and both roles' "Upload Documents" path at configurable resolutions, saving individually-named PNGs
 incrementally and merging each run into a single ordered PDF.
 
 ## Folder layout
@@ -16,10 +16,12 @@ src/shared/screenshots-engine/    engine - no business logic, no program-specifi
 src/programs/apotex-evdi/screenshots/
   core/                            program-specific interaction helpers
     dropdownExpander.ts            opens/expands Gender + State comboboxes for a screenshot
-  pages/                           3 files, one per shared page / path
+  pages/                           4 files, one per shared page / path
     01_homePage.screenshot.ts      Landing page (both roles' default + role-selected states)
     02_patientPath.screenshot.ts   Eligibility -> Not-Eligible detour -> Patient Information -> Consent -> Success
     03_hcpPath.screenshot.ts       same shape, Not-Eligible detour first, no Consent step, 9-error validation instead of 10
+    04_documentUploadPath.screenshot.ts  "Upload Documents" path, run once per role after its enrollment path:
+                                   empty-submit error -> invalid type -> over 10 MB -> files selected -> success
   runner/
     run-patient-path.ts            Patient path only, one resolution
     run-hcp-path.ts                HCP path only, one resolution
@@ -45,7 +47,7 @@ screenshots/
 Every capture is `<NN>_<path>_<page>_<state>.png`, e.g.
 `08_patient_patientInformation_validationError_10errors.png`. `NN` is a
 2-digit, zero-padded sequence number that increments continuously across
-`01_homePage` into `02_patientPath`/`03_hcpPath` within one path run - it is
+`01_homePage` into `02_patientPath`/`03_hcpPath` and then `04_documentUploadPath` within one path run - it is
 tracked by a shared counter in `screenshotHelper.ts`, so inserting or
 removing a capture never requires manually renumbering anything else.
 
@@ -54,7 +56,7 @@ removing a capture never requires manually renumbering anything else.
 1. Add a line to the relevant file in `src/programs/apotex-evdi/screenshots/pages/`
    calling `capture(page, context, 'descriptiveName')` at the point in the flow you
    want to snapshot. Only call existing `pages`/`modules` methods to get there - don't
-   add new locators in these 3 files (put reusable new interaction helpers in
+   add new locators in these 4 files (put reusable new interaction helpers in
    `src/programs/apotex-evdi/screenshots/core/` instead, as `dropdownExpander.ts` does).
 2. Nothing else needs to change - the sequence number and file path are
    derived automatically.
