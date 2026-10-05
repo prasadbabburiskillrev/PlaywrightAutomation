@@ -1,5 +1,5 @@
 // Single source of truth for device/browser/execution settings used by the
-// screenshot framework under src/programs/apotex-evdi/screenshots/.
+// screenshot framework under src/programs/summit-ivonescimab/screenshots/.
 //
 // To change what gets captured, edit only this file:
 // - Resolutions: edit the RESOLUTIONS array below (name/width/height).
@@ -55,17 +55,20 @@ export const DEFAULT_BROWSER: BrowserName = 'chrome';
 export type ExecutionMode = 'headless' | 'headed';
 export const EXECUTION_MODE: ExecutionMode = 'headed';
 
-export const PROGRAM_NAME = 'PortalAutomation';
+export const PROGRAM_NAME = 'BivtuoWithYou';
 
 // Matches this program's own src/programs/<PROGRAM_KEY> folder name. Used
 // only to partition screenshot output (screenshots/<PROGRAM_KEY>/...) so a
 // second program's captures can never land in this one's folder even if its
 // PROGRAM_NAME brand label was copy-pasted without changing.
-export const PROGRAM_KEY = 'apotex-evdi';
+export const PROGRAM_KEY = 'summit-ivonescimab';
 
-// The Apotex eVDI SPA's own route-transition overlay class, passed into the
-// shared screenshot engine's `createRunContext(...)` so it can wait for it
-// without the shared engine hardcoding any program-specific selector.
+// Confirmed live, 2026-09-23: Summit's loaded stylesheet contains the exact
+// same `.half-circle-spinner` CSS rules (including `circle-1`/`circle-2`
+// sub-selectors and keyframe animation name) as Apotex's — same platform,
+// same overlay component. Passed into the shared screenshot engine's
+// `createRunContext(...)` so it can wait for it without the shared engine
+// hardcoding any program-specific selector.
 export const SPINNER_SELECTOR = '.half-circle-spinner';
 
 export function getResolution(name: string): Resolution {

@@ -4,19 +4,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-TypeScript + Playwright end-to-end test suite for the Apotex eVDI enrollment portal
-(`https://portal-qa.trialcard.com/apotex/evdi/`, a Vuetify SPA), plus a separate
-screenshot/visual-documentation tool that drives the same page objects. There is no
-application source in this repo — this is a test/automation framework only.
+TypeScript + Playwright end-to-end test suites for TrialCard copay enrollment portals
+(Vuetify SPAs on the shared QA host `https://portal-qa.trialcard.com/`): the Apotex
+eVDI portal (`/apotex/evdi/`) and the Summit Ivonescimab portal (`/summit/ivonescimab/`).
+Each also has a separate screenshot/visual-documentation tool that drives the same page
+objects. There is no application source in this repo — this is a test/automation
+framework only.
 
 The repo is structured to support more than one similar program (site) side by side —
-see "Multi-program layout" below. Today there is exactly one program, `apotex-evdi`.
+see "Multi-program layout" below. Today there are two programs: `apotex-evdi` (full
+Patient + HCP enrollment) and `summit-ivonescimab` (Patient enrollment up to Patient
+Information — see
+[docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md](docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md)
+for what's follow-up).
 
 ## Commands
 
 ```bash
 npm test                              # run every program's Playwright suite
 npm run test:apotex-evdi              # run only the apotex-evdi program's suite
+npm run test:summit-ivonescimab       # run only the summit-ivonescimab program's suite
 npm run test:headed                   # same, with a visible browser
 npm run report                        # open the last HTML report (playwright-report/)
 npx playwright test src/programs/apotex-evdi/tests/patient-enrollment.spec.ts   # run a single spec file
@@ -29,33 +36,41 @@ work without checking `package.json` first.
 
 ### Screenshot framework (separate from the test suite)
 
+Scripts are program-prefixed (`screenshots:<program>:<resolution>`), since output must
+stay isolated per program:
+
 ```bash
-npm run screenshots:xlDesktop   # 1920x1080
-npm run screenshots:lDesktop    # 1440x1080
-npm run screenshots:desktop     # 1024x1080
-npm run screenshots:lTablet     # 1280x800
-npm run screenshots:pTablet     # 768x1024
-npm run screenshots:xsMobile    # 375x1080
-npm run screenshots:all         # every resolution above, sequentially
+npm run screenshots:apotex-evdi:xlDesktop         # 1920x1080
+npm run screenshots:apotex-evdi:lDesktop          # 1440x1080
+npm run screenshots:apotex-evdi:desktop           # 1024x1080
+npm run screenshots:apotex-evdi:lTablet           # 1280x800
+npm run screenshots:apotex-evdi:pTablet           # 768x1024
+npm run screenshots:apotex-evdi:xsMobile          # 375x1080
+npm run screenshots:apotex-evdi:all               # every resolution above, sequentially
+
+npm run screenshots:summit-ivonescimab:xlDesktop  # same 6 resolutions + "all",
+npm run screenshots:summit-ivonescimab:xsMobile   # for the summit-ivonescimab program
 
 # ad hoc, without editing files:
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet --browser=firefox
+npx tsx src/programs/summit-ivonescimab/screenshots/runner/run-all.ts --device=pTablet --browser=firefox
 ```
 
-Each run drives the Patient path fully (enrollment, then document upload), then the HCP
-path fully (same), using Chrome by default. Output goes to
-`screenshots/apotex-evdi/<timestamp>/<resolution>_<browser>/` (PNG + a merged PDF), and
-`screenshots/` is gitignored. The `apotex-evdi` segment comes
-from `PROGRAM_KEY`, not `PROGRAM_NAME` — `PROGRAM_KEY` is what actually keeps two
-programs' output from colliding (it must match this program's `src/programs/<key>`
-folder name), while `PROGRAM_NAME` is just a cosmetic brand label used in PDF filenames
-and does not guarantee uniqueness on its own. All resolution/browser/headless config
-lives in one file: [src/programs/apotex-evdi/utils/deviceBrowsers.ts](src/programs/apotex-evdi/utils/deviceBrowsers.ts)
-(`RESOLUTIONS`, `BROWSERS`, `DEFAULT_BROWSER`, `EXECUTION_MODE`, `PROGRAM_NAME`,
-`PROGRAM_KEY`). Adding a resolution also requires a matching `screenshots:<name>` script
-in `package.json`. See
-[src/programs/apotex-evdi/screenshots/README.md](src/programs/apotex-evdi/screenshots/README.md)
-for the full convention (naming, sequence numbering, where to add new captures).
+Apotex's run drives the Patient path fully (enrollment, then document upload), then
+the HCP path fully (same); Summit's currently drives the Patient path only, up to
+Patient Information (see [docs/onboarding-new-program.md](docs/onboarding-new-program.md)
+for why). Output goes to `screenshots/<PROGRAM_KEY>/<timestamp>/<resolution>_<browser>/` (PNG + a merged PDF), and
+`screenshots/` is gitignored. `PROGRAM_KEY` (e.g. `apotex-evdi`, `summit-ivonescimab`) is
+what actually keeps two programs' output from colliding (it must match that program's
+`src/programs/<key>` folder name); `PROGRAM_NAME` is just a cosmetic brand label used in
+PDF filenames and does not guarantee uniqueness on its own. Each program's own
+`utils/deviceBrowsers.ts` (e.g.
+[src/programs/apotex-evdi/utils/deviceBrowsers.ts](src/programs/apotex-evdi/utils/deviceBrowsers.ts))
+holds its `RESOLUTIONS`, `BROWSERS`, `DEFAULT_BROWSER`, `EXECUTION_MODE`, `PROGRAM_NAME`,
+`PROGRAM_KEY`. Adding a resolution also requires a matching
+`screenshots:<program>:<name>` script in `package.json`. See that program's own
+`screenshots/README.md` for the full convention (naming, sequence numbering, where to
+add new captures).
 
 ## Multi-program layout
 
@@ -69,18 +84,20 @@ src/
     apotex-evdi/                 everything specific to this one site
       pages/  modules/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
       .env                       APOTEX_EVDI_BASE_URL (program-specific secret/config)
+    summit-ivonescimab/          Patient enrollment flow only so far (see
+                                  docs/superpowers/specs/2026-09-23-summit-ivonescimab-
+                                  onboarding-design.md for what's follow-up)
+      pages/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
+      .env                       SUMMIT_IVONESCIMAB_BASE_URL
 ```
 
-Onboarding a new, similar program: copy `src/programs/apotex-evdi/`, rename the folder
-and its `.env` var prefix, edit locators/testdata to match the new site, and add one
-entry to `playwright.config.ts`'s `projects[]` array plus matching `package.json`
-script lines — the one accepted exception to pure copy-paste, consistent with the
-existing per-resolution `screenshots:<name>` script convention. **Also update
-`PROGRAM_KEY` in the copied `utils/deviceBrowsers.ts` to match the new folder name** —
-unlike `PROGRAM_NAME` (a cosmetic label), forgetting to change `PROGRAM_KEY` means the
-new program's screenshots silently land in the old program's output folder instead of
-their own. Never re-implement `src/shared/` per program — if a program needs a fix
-there, it's fixed once, for every program.
+Onboarding a new, similar program: see
+[docs/onboarding-new-program.md](docs/onboarding-new-program.md) for the full,
+validated procedure (research the live site first, pick `PROGRAM_KEY` and a namespaced
+`.env` var upfront, scaffold, wire into `playwright.config.ts`/`package.json`, build the
+screenshot framework, verify zero regression on every other program). Never
+re-implement `src/shared/` per program — if a program needs a fix there, it's fixed
+once, for every program.
 
 `src/shared/screenshots-engine/` only ever holds code with **zero** domain knowledge of
 any one program (no locators, no field names, no site-specific quirks) — if you're
@@ -94,7 +111,9 @@ Full rationale: [docs/superpowers/specs/2026-09-03-multi-program-figma-design-va
 
 ## Architecture
 
-**Page Object Model with a business-flow layer on top**, all under `src/programs/apotex-evdi/`:
+**Page Object Model with a business-flow layer on top**, one copy per program under
+`src/programs/<key>/`. `apotex-evdi` is the full reference shape, described below;
+`summit-ivonescimab`'s differences follow the list.
 
 - `pages/` — one class per screen, locators + low-level actions only
   (`LandingPage`, `EligibilityPage`, `PatientInformationPage`, `PatientConsentPage`,
@@ -129,18 +148,28 @@ Full rationale: [docs/superpowers/specs/2026-09-03-multi-program-figma-design-va
 - `src/api/` (repo root, outside any program) is scaffolded but currently empty (no API
   layer implemented yet).
 
+`summit-ivonescimab` follows the same layout with a smaller scope: Patient role only
+(`PortalRole = 'patient'`, `PortalAction = 'enrollCopay'`); pages `LandingPage`,
+`EligibilityPage`, `NotEligiblePage`, `PatientInformationPage`; no `modules/` folder
+(no multi-page flow is composed yet, since enrollment stops at Patient Information); page
+fixtures only; and `config/index.ts` reads `SUMMIT_IVONESCIMAB_BASE_URL`. Its landing page
+shows one card per role, each with its own radiogroup, and the action labels are unique,
+so `selectRoleAction` needs no radiogroup-index scoping (unlike Apotex). Locators,
+question order, and error counts are Summit's own and were verified live; don't assume
+Apotex's values carry over.
+
 Index barrel files (`<folder>/index.ts`) re-export everything in that folder and are the
 intended import path for consumers outside that folder — update them when adding a file.
 
 ### The screenshot framework is a second consumer of the same POM
 
-`src/programs/apotex-evdi/screenshots/` never adds its own locators — it only calls
+Each program's `screenshots/` folder (e.g. `src/programs/apotex-evdi/screenshots/`) never adds its own locators — it only calls
 existing `pages`/`modules` methods and adds reusable interaction helpers (e.g. dropdown
 expansion) under its own `screenshots/core/`. The actual capture engine —
 `screenshotHelper.ts` (owns the shared `RunContext`: output dirs, PNG manifest,
 auto-incrementing sequence number across pages within one run) and `pdfMerger.ts`
 (merges the manifest into one ordered PDF) — lives in `src/shared/screenshots-engine/`,
-since neither file has any Apotex-specific knowledge.
+since neither file has any program-specific knowledge.
 
 ## Non-obvious behavior to know before editing tests/pages
 

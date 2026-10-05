@@ -102,10 +102,16 @@ After installing, add scripts to `package.json`, e.g.:
 ## Running the tests
 
 All commands run from the repo root (`c:\Users\LENOVO\Documents\Playwright_Automation`).
+The repo hosts two programs side by side, each in its own `src/programs/<key>/` folder:
 
-> **Live system:** both the e2e suite and the screenshot scripts run against the shared
-> QA host (`https://portal-qa.trialcard.com/apotex/evdi/`). They create real enrollment
-> records and upload real documents. Nothing is mocked.
+| Program key | Site | Base URL env var (in that program's `.env`) |
+| --- | --- | --- |
+| `apotex-evdi` | Apotex eVDI enrollment portal | `APOTEX_EVDI_BASE_URL` (falls back to `https://portal-qa.trialcard.com/apotex/evdi/`) |
+| `summit-ivonescimab` | Summit Ivonescimab enrollment portal | `SUMMIT_IVONESCIMAB_BASE_URL` (falls back to `https://portal-qa.trialcard.com/summit/ivonescimab/`) |
+
+> **Live system:** both the e2e suites and the screenshot scripts run against the shared
+> QA host (`portal-qa.trialcard.com`). They create real enrollment records and upload
+> real documents. Nothing is mocked.
 
 ### One-time setup
 
@@ -114,20 +120,19 @@ npm ci                      # install dependencies
 npx playwright install      # download the browsers Playwright drives
 ```
 
-The base URL comes from `APOTEX_EVDI_BASE_URL` in `src/programs/apotex-evdi/.env`.
-If that file or variable is missing, it falls back to the QA host above.
+The `.env` files are optional; each program falls back to its QA URL above.
 
-### E2E test suite (Playwright Test)
+### E2E test suites (Playwright Test)
 
 | Command | What it runs |
 | --- | --- |
-| `npm test` | Every program's suite (today only `apotex-evdi`), headless |
+| `npm test` | Every program's suite, headless |
 | `npm run test:apotex-evdi` | Only the `apotex-evdi` project |
+| `npm run test:summit-ivonescimab` | Only the `summit-ivonescimab` project |
 | `npm run test:headed` | Every suite with a visible browser |
 | `npm run report` | Opens the HTML report from the last run (`playwright-report/`) |
 
-The `apotex-evdi` suite has 17 tests across three spec files in
-`src/programs/apotex-evdi/tests/`:
+**apotex-evdi:** 17 tests across three spec files in `src/programs/apotex-evdi/tests/`:
 
 | Spec file | Tests | Covers |
 | --- | --- | --- |
@@ -135,16 +140,28 @@ The `apotex-evdi` suite has 17 tests across three spec files in
 | `hcp-enrollment.spec.ts` | 3 | Not-eligible route, 9-field validation, full enrollment to success |
 | `document-upload.spec.ts` | 10 (5 per role) | Patient + HCP "Upload Documents": empty submit, invalid file type, over 10 MB, remove a file, real upload to success |
 
+**summit-ivonescimab:** 3 tests in `src/programs/summit-ivonescimab/tests/`:
+
+| Spec file | Tests | Covers |
+| --- | --- | --- |
+| `patient-enrollment.spec.ts` | 3 | Not-eligible route (federal/state program), eligible → Patient Information, 10-field validation |
+
+Summit stops at Patient Information for now. The live site currently blocks the step
+after it; see `docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md`
+for the follow-up list.
+
 Run a subset:
 
 ```bash
-# one spec file
+# one program, one spec file
 npx playwright test src/programs/apotex-evdi/tests/document-upload.spec.ts
+npx playwright test src/programs/summit-ivonescimab/tests/patient-enrollment.spec.ts
 
-# tests whose title matches a pattern
+# tests whose title matches a pattern (add --project=<key> to limit to one program)
 npx playwright test -g "uploads documents successfully"
+npx playwright test --project=summit-ivonescimab -g "validation error"
 
-# one role's upload tests only
+# one role's upload tests only (apotex-evdi)
 npx playwright test -g "HCP document upload"
 
 # watch it run in a real browser
@@ -157,35 +174,41 @@ npx playwright test -g "removes one" --debug
 Things to expect:
 
 - **It's slow by design.** Tests run one at a time (`workers: 1`), and every landing-page
-  "Next" click is preceded by an intentional 10s wait. The full suite takes roughly
-  20 minutes. The default per-test timeout is 90s; end-to-end tests raise their own.
-- **HCP end-to-end retries are expected.** The HCP "completes enrollment successfully"
-  test has a known, escalated app bug on its final Submit (about a 1-in-3 pass rate
-  per attempt). Its describe block allows 5 retries, so a "flaky" result there is
-  normal. See the comment in `hcp-enrollment.spec.ts`.
-- Upload test files live in `src/programs/apotex-evdi/testdata/uploads/` (sample PDF
-  and PNG). The invalid-type and oversize files are generated in memory.
+  "Next" click is preceded by an intentional 10s wait. The apotex-evdi suite takes about
+  20 minutes; summit-ivonescimab about 3. The default per-test timeout is 90s;
+  end-to-end tests raise their own.
+- **apotex-evdi HCP end-to-end retries are expected.** The HCP "completes enrollment
+  successfully" test has a known, escalated app bug on its final Submit (about a 1-in-3
+  pass rate per attempt). Its describe block allows 5 retries, so a "flaky" result there
+  is normal. See the comment in `hcp-enrollment.spec.ts`.
+- apotex-evdi upload test files live in `src/programs/apotex-evdi/testdata/uploads/`
+  (sample PDF and PNG). The invalid-type and oversize files are generated in memory.
 
 ### Screenshot framework (visual documentation)
 
-A separate tool, not part of `npm test`. Each run walks the **Patient path** (landing →
-eligibility → patient information → consent → success, then the document-upload
-path), then the **HCP path** (same, without consent). It saves a numbered PNG of every
-state and merges them into one PDF. One full run produces about 40 screenshots.
+A separate tool, not part of `npm test`. It walks a program's flow, saves a numbered PNG
+of every state, and merges them into one PDF.
 
-One resolution per command (Chrome, **headed** by default):
+- **apotex-evdi** walks the Patient path (landing → eligibility → patient information →
+  consent → success, then the document-upload path), then the HCP path (same, without
+  consent). About 40 screenshots per run.
+- **summit-ivonescimab** walks the Patient path only, landing → eligibility → patient
+  information. 11 screenshots per run.
 
-| Command | Resolution | Viewport |
-| --- | --- | --- |
-| `npm run screenshots:xlDesktop` | xlDesktop | 1920×1080 |
-| `npm run screenshots:lDesktop` | lDesktop | 1440×1080 |
-| `npm run screenshots:desktop` | Desktop | 1024×1080 |
-| `npm run screenshots:lTablet` | lTablet | 1280×800 |
-| `npm run screenshots:pTablet` | pTablet | 768×1024 |
-| `npm run screenshots:xsMobile` | xsMobile | 375×1080 |
-| `npm run screenshots:all` | every resolution above, one after another | |
+Scripts are named `screenshots:<program>:<resolution>`. One resolution per command
+(Chrome, **headed** by default):
 
-`screenshots:all` keeps going if one resolution fails. Look for a
+| apotex-evdi | summit-ivonescimab | Resolution | Viewport |
+| --- | --- | --- | --- |
+| `npm run screenshots:apotex-evdi:xlDesktop` | `npm run screenshots:summit-ivonescimab:xlDesktop` | xlDesktop | 1920×1080 |
+| `npm run screenshots:apotex-evdi:lDesktop` | `npm run screenshots:summit-ivonescimab:lDesktop` | lDesktop | 1440×1080 |
+| `npm run screenshots:apotex-evdi:desktop` | `npm run screenshots:summit-ivonescimab:desktop` | Desktop | 1024×1080 |
+| `npm run screenshots:apotex-evdi:lTablet` | `npm run screenshots:summit-ivonescimab:lTablet` | lTablet | 1280×800 |
+| `npm run screenshots:apotex-evdi:pTablet` | `npm run screenshots:summit-ivonescimab:pTablet` | pTablet | 768×1024 |
+| `npm run screenshots:apotex-evdi:xsMobile` | `npm run screenshots:summit-ivonescimab:xsMobile` | xsMobile | 375×1080 |
+| `npm run screenshots:apotex-evdi:all` | `npm run screenshots:summit-ivonescimab:all` | every resolution above, one after another | |
+
+The `:all` scripts keep going if one resolution fails. Look for a
 `Completed with failures for: ...` line at the end of the console output.
 
 Ad hoc, without editing any files (call the runner directly):
@@ -193,11 +216,13 @@ Ad hoc, without editing any files (call the runner directly):
 ```bash
 # any resolution
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=pTablet
+npx tsx src/programs/summit-ivonescimab/screenshots/runner/run-all.ts --device=pTablet
 
 # any resolution + browser
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
+npx tsx src/programs/summit-ivonescimab/screenshots/runner/run-all.ts --device=xsMobile --browser=firefox
 
-# only one role's path (still includes that role's document-upload captures)
+# apotex-evdi only: one role's path (still includes that role's document-upload captures)
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-patient-path.ts --device=xsMobile
 npx tsx src/programs/apotex-evdi/screenshots/runner/run-hcp-path.ts --device=xsMobile
 ```
@@ -209,29 +234,37 @@ npx tsx src/programs/apotex-evdi/screenshots/runner/run-hcp-path.ts --device=xsM
 **Where output goes** (`screenshots/` is gitignored):
 
 ```
-screenshots/apotex-evdi/<runTimestamp>/<resolution>_<browser>/
+screenshots/<PROGRAM_KEY>/<runTimestamp>/<resolution>_<browser>/
   PNG/all screenshots/NN_<role>_<page>_<state>.png     e.g. 19_patient_documentUpload_fileTooLarge.png
-  PDF/PortalAutomation_<resolution>_<browser>_<date>.pdf
+  PDF/<PROGRAM_NAME>_<resolution>_<browser>_<date>.pdf
 ```
 
-**Permanent settings** all live in `src/programs/apotex-evdi/utils/deviceBrowsers.ts`:
+`PROGRAM_KEY` (`apotex-evdi`, `summit-ivonescimab`) keeps each program's output
+separate. `PROGRAM_NAME` (`PortalAutomation`, `BivtuoWithYou`) is only a label in the
+PDF filename.
+
+**Permanent settings** live in each program's own `utils/deviceBrowsers.ts`
+(`src/programs/apotex-evdi/utils/deviceBrowsers.ts`,
+`src/programs/summit-ivonescimab/utils/deviceBrowsers.ts`):
 
 | To change... | Edit... |
 | --- | --- |
 | Which resolutions exist | the `RESOLUTIONS` array (`{ name, width, height }`) |
 | Which browsers exist | the `BROWSERS` array (`{ name, engine, channel? }`) |
 | Default browser for the npm scripts | `DEFAULT_BROWSER` |
-| Headless vs headed | `EXECUTION_MODE` (`'headless'` or `'headed'`; currently `'headed'`) |
+| Headless vs headed | `EXECUTION_MODE` (`'headless'` or `'headed'`; currently `'headed'` in both) |
 | Output folder (`screenshots/<PROGRAM_KEY>/`) | `PROGRAM_KEY`; must match the program's `src/programs/<key>` folder |
 | PDF filename label | `PROGRAM_NAME` (cosmetic only) |
 
-If you add a resolution, also add a matching `screenshots:<name>` script to
+If you add a resolution, also add a matching `screenshots:<program>:<name>` script to
 `package.json` (copy an existing line and change `--device=`).
 
-Known limitation: the HCP path's final Submit hits the same app bug as the e2e test.
-The screenshot run tries it once. If it fails, the run skips only the
+Known limitation (apotex-evdi): the HCP path's final Submit hits the same app bug as the
+e2e test. The screenshot run tries it once. If it fails, the run skips only the
 `hcp_success_default` capture, logs a warning, and continues with the HCP upload path.
 Re-run if you need that capture.
 
-See `src/programs/apotex-evdi/screenshots/README.md` for naming conventions and how to
-add new captures.
+Each program's `screenshots/README.md`
+(`src/programs/apotex-evdi/screenshots/README.md`,
+`src/programs/summit-ivonescimab/screenshots/README.md`) covers naming conventions and
+how to add new captures.
