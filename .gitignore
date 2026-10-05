@@ -13,3 +13,9 @@ playwright-report/
 
 # Screenshot framework generated output
 /screenshots/
+
+# Figma design-validation: baselines hold client mockup content and this repo is
+# public, so they are regenerated locally with `figma:sync:<program>`; the report
+# is generated output too.
+src/programs/*/design-validation/baseline/
+design-report/

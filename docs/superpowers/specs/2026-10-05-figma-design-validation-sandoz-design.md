@@ -25,12 +25,15 @@ depend on a working end-to-end journey.
 | Breakpoints | **Desktop and mobile** (frame sizes as in Figma; live viewports set to match each frame's width). |
 | Gating | **Report-only** at launch. Switch to hard-fail is an explicit, documented later decision. |
 | Architecture | Manual **sync script** writes committed baseline JSON; comparison runs as a **Playwright project** reusing existing fixtures/page objects. |
-| Access status | No token or file link yet. Everything except the live sync is buildable and testable offline. |
+| Access status | Token and file link are being provided by the user (token goes in the gitignored root `.env`, never in chat or git). Everything except the live sync is buildable and testable offline. |
+| Baseline storage | **Repo is public**, so `baseline/` and `design-report/` are **gitignored** and regenerated locally with `figma:sync`. Mockup text/colours/layout are never committed. Framework code, manifest and mappings are committed. |
 
 ## Non-goals
 
 - Pixel-diff / image-comparison visual regression.
 - Fetching Figma at test-run time, or needing the token in CI.
+- Publishing mockup content: baselines are not committed (public repo).
+- Reproducing a design check without a token: each person/machine runs `figma:sync` first.
 - Gating CI on design mismatches (until explicitly promoted).
 - Covering HCP, Pharmacy, Transition, Upload paths in the first version.
 - Submitting any form: design checks only read pages (no enrollment records
@@ -51,8 +54,8 @@ src/shared/design-validation-engine/        program-agnostic; no Sandoz/Patient/
 src/programs/sandoz-tyruko-copay/design-validation/
   manifest.ts               page -> states -> Figma node IDs, entry strategy, status
   mapping/<page>.<state>.ts Figma node -> locator + check list + tolerance
-  baseline/<page>/<state>.<breakpoint>.json     committed snapshots
-  baseline/images/...       optional exported frame PNGs
+  baseline/<page>/<state>.<breakpoint>.json     LOCAL snapshots (gitignored)
+  baseline/images/...       optional exported frame PNGs (gitignored)
   tests/design-check.spec.ts                    generated-per-state tests
 ```
 
@@ -162,8 +165,16 @@ Tolerance and the list of checked properties are overridable per element.
 - Token scope **File content: Read-only** only; stored in gitignored root
   `.env`; `.env.example` holds placeholders. Set a 30/60/90-day expiry.
 - Used only by the manual sync script; `npm test` and CI never need it.
-- Baselines contain design text/colours: confirm the repo is private before
-  committing real Sandoz mockup data.
+- **The repo is public.** Baselines (mockup copy, colours, layout) and exported
+  frame images are therefore gitignored
+  (`src/programs/*/design-validation/baseline/`, `design-report/`) and never
+  committed. The manifest and mappings are committed; they hold only opaque
+  Figma node IDs, locators and tolerances. The Figma file key lives in the
+  gitignored program `.env`.
+- Never paste the token into chat, issues or commits; put it in root `.env`.
+- Implication: a fresh clone has no baseline; run `figma:sync:<program>` (needs
+  a token) before `design-check`. Without a baseline every page reports
+  "skipped: run figma:sync".
 
 ### J. Testing the framework
 
@@ -195,6 +206,7 @@ Tolerance and the list of checked properties are overridable per element.
 
 ## Open items (need input, not blockers for steps 1-3)
 
-- Figma personal access token (Read-only) and the Sandoz Figma file link/key.
-- Node IDs of the desktop and mobile frames per page and state.
-- Confirmation that the repo is private before committing baselines.
+- Sandoz Figma file link (gives the file key) and the user placing a
+  read-only `FIGMA_TOKEN` in root `.env`.
+- Node IDs of the desktop and mobile frames per page and state (can be read
+  from the file once the link and token work).
