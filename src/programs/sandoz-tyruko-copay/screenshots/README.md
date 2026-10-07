@@ -1,8 +1,8 @@
 # Screenshot Framework
 
 Standalone visual-documentation/regression screenshot tooling, separate from
-`src/programs/summit-ivonescimab/tests/e2e/`. It drives the existing
-`src/programs/summit-ivonescimab/pages` Page Object Model through the Patient enrollment
+`src/programs/sandoz-tyruko-copay/tests/e2e/`. It drives the existing
+`src/programs/sandoz-tyruko-copay/pages` Page Object Model through the Patient enrollment
 wizard at configurable resolutions, saving individually-named PNGs incrementally and
 merging each run into a single ordered PDF.
 

@@ -19,3 +19,6 @@ playwright-report/
 # is generated output too.
 src/programs/*/design-validation/baseline/
 design-report/
+
+# Figma metadata for programs without a program folder yet (public repo: never commit)
+testmeta/

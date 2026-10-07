@@ -15,7 +15,7 @@ Playwright_Automation/
 │   ├── modules/         # Multi-page business-flow abstractions
 │   ├── pages/           # Page Object Model classes
 │   ├── testdata/        # Static test data + TS types
-│   ├── tests/           # Playwright spec files
+│   ├── tests/           # e2e/ (business-flow specs) and design/ (Figma-vs-live UI specs)
 │   └── utils/           # Shared helper utilities
 ├── docs/                # Framework documentation
 ├── rules/               # Custom rule-engine config
@@ -44,7 +44,8 @@ Playwright_Automation/
 | A multi-step business flow spanning several pages | `src/modules/`                      | `CheckoutModule.ts`, `LoginModule.ts`  |
 | Locators + actions for a single screen            | `src/pages/`                        | `HomePage.ts`, `LoginPage.ts`          |
 | Static fixtures/mock data or its TS shape         | `src/testdata/`                     | `users.json`, `types.ts`               |
-| An actual `*.spec.ts` test                        | `src/tests/`                        | `login.spec.ts`                        |
+| A business-flow test                              | `src/programs/<key>/tests/e2e/`     | `patient-enrollment.e2e.spec.ts`       |
+| A Figma-vs-live UI (design) test                  | `src/programs/<key>/tests/design/`  | `transition-success.design.spec.ts`    |
 | A shared helper (logging, waits, reporters, faker)| `src/utils/`                        | `Logger.ts`, `WaitHelper.ts`           |
 | A GitHub Actions workflow                         | `.github/workflows/`                | `playwright.yml`                       |
 | A Copilot/Cursor/Windsurf/Augment rule file       | `.github/instructions/`, root `.cursorrules`/`.windsurfrules`, `.augment/rules/` | |
@@ -122,29 +123,37 @@ npx playwright install      # download the browsers Playwright drives
 
 The `.env` files are optional; each program falls back to its QA URL above.
 
+> Every command (e2e, design, screenshot capture) in one place: [docs/commands.md](docs/commands.md).
+
 ### E2E test suites (Playwright Test)
+
+Every program has two Playwright projects, split by what a spec is for: `<key>-e2e`
+(business flows, `tests/e2e/*.e2e.spec.ts`) and `<key>-design` (Figma-vs-live UI checks,
+`tests/design/*.design.spec.ts`). `npm test` runs the e2e projects only; the design checks
+are run on demand, see [Design checks](#design-checks-figma-vs-live-ui).
 
 | Command | What it runs |
 | --- | --- |
-| `npm test` | Every program's suite, headless |
-| `npm run test:apotex-evdi` | Only the `apotex-evdi` project |
-| `npm run test:summit-ivonescimab` | Only the `summit-ivonescimab` project |
-| `npm run test:headed` | Every suite with a visible browser |
+| `npm test` | Every program's e2e suite, headless |
+| `npm run test:apotex-evdi` | Only the `apotex-evdi-e2e` project |
+| `npm run test:summit-ivonescimab` | Only the `summit-ivonescimab-e2e` project |
+| `npm run test:sandoz-tyruko-copay` | Only the `sandoz-tyruko-copay-e2e` project |
+| `npm run test:headed` | Every e2e suite with a visible browser |
 | `npm run report` | Opens the HTML report from the last run (`playwright-report/`) |
 
-**apotex-evdi:** 17 tests across three spec files in `src/programs/apotex-evdi/tests/`:
+**apotex-evdi:** 17 tests across three spec files in `src/programs/apotex-evdi/tests/e2e/`:
 
 | Spec file | Tests | Covers |
 | --- | --- | --- |
-| `patient-enrollment.spec.ts` | 4 | Not-eligible route, eligible → Patient Information, 10-field validation, full enrollment to success |
-| `hcp-enrollment.spec.ts` | 3 | Not-eligible route, 9-field validation, full enrollment to success |
-| `document-upload.spec.ts` | 10 (5 per role) | Patient + HCP "Upload Documents": empty submit, invalid file type, over 10 MB, remove a file, real upload to success |
+| `patient-enrollment.e2e.spec.ts` | 4 | Not-eligible route, eligible → Patient Information, 10-field validation, full enrollment to success |
+| `hcp-enrollment.e2e.spec.ts` | 3 | Not-eligible route, 9-field validation, full enrollment to success |
+| `document-upload.e2e.spec.ts` | 10 (5 per role) | Patient + HCP "Upload Documents": empty submit, invalid file type, over 10 MB, remove a file, real upload to success |
 
-**summit-ivonescimab:** 3 tests in `src/programs/summit-ivonescimab/tests/`:
+**summit-ivonescimab:** 3 tests in `src/programs/summit-ivonescimab/tests/e2e/`:
 
 | Spec file | Tests | Covers |
 | --- | --- | --- |
-| `patient-enrollment.spec.ts` | 3 | Not-eligible route (federal/state program), eligible → Patient Information, 10-field validation |
+| `patient-enrollment.e2e.spec.ts` | 3 | Not-eligible route (federal/state program), eligible → Patient Information, 10-field validation |
 
 Summit stops at Patient Information for now. The live site currently blocks the step
 after it; see `docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md`
@@ -154,18 +163,18 @@ Run a subset:
 
 ```bash
 # one program, one spec file
-npx playwright test src/programs/apotex-evdi/tests/document-upload.spec.ts
-npx playwright test src/programs/summit-ivonescimab/tests/patient-enrollment.spec.ts
+npx playwright test src/programs/apotex-evdi/tests/e2e/document-upload.e2e.spec.ts
+npx playwright test src/programs/summit-ivonescimab/tests/e2e/patient-enrollment.e2e.spec.ts
 
-# tests whose title matches a pattern (add --project=<key> to limit to one program)
+# tests whose title matches a pattern (add --project=<key>-e2e to limit to one program)
 npx playwright test -g "uploads documents successfully"
-npx playwright test --project=summit-ivonescimab -g "validation error"
+npx playwright test --project=summit-ivonescimab-e2e -g "validation error"
 
 # one role's upload tests only (apotex-evdi)
 npx playwright test -g "HCP document upload"
 
 # watch it run in a real browser
-npx playwright test src/programs/apotex-evdi/tests/document-upload.spec.ts --headed
+npx playwright test src/programs/apotex-evdi/tests/e2e/document-upload.e2e.spec.ts --headed
 
 # step through interactively with the Playwright Inspector
 npx playwright test -g "removes one" --debug
@@ -180,9 +189,48 @@ Things to expect:
 - **apotex-evdi HCP end-to-end retries are expected.** The HCP "completes enrollment
   successfully" test has a known, escalated app bug on its final Submit (about a 1-in-3
   pass rate per attempt). Its describe block allows 5 retries, so a "flaky" result there
-  is normal. See the comment in `hcp-enrollment.spec.ts`.
+  is normal. See the comment in `hcp-enrollment.e2e.spec.ts`.
 - apotex-evdi upload test files live in `src/programs/apotex-evdi/testdata/uploads/`
   (sample PDF and PNG). The invalid-type and oversize files are generated in memory.
+
+### Design checks (Figma vs live UI)
+
+Separate from the e2e suites and from the screenshot framework. A design spec opens a live
+page and checks its computed styles (fonts, colours, spacing, copy) against the Figma
+mockup. They live in `src/programs/<key>/tests/design/*.design.spec.ts` and run as the
+`<key>-design` Playwright projects, so a slow live-page check never slows `npm test`.
+
+| Command | What it runs |
+| --- | --- |
+| `npm run test:design` | Every program's design specs |
+| `npm run test:sandoz-tyruko-copay:design` | Only that program's design specs |
+| `npm run design:split -- <program> <raw-file>` | Split a saved Figma section dump into one file per page |
+| `npm run design:convert -- <program>` | Convert the split pages to body-only JSON |
+| `npm run test:sandoz-tyruko-copay:design -- tests/design/transition-success` | runs specific desing spec file figma v/s Live UI comparison |
+| `npm run design:report -- <program>` | Runs that program's design specs against the live site, then writes a Word report to `design-report/<program>-design-report.docx` |
+| `npm run design:report -- <program> -- --no-run` | Rebuilds the Word report from the last saved run, without touching the live site |
+| `npm run design:report -- <program> --story=<id>` | Runs only the design specs whose title starts with `US-<id>` (e.g. `--story=280439`) and tags the report with that user story id; file is `<program>-US-<id>-design-report.docx` |
+
+**Word report (`design:report`).** Use it to attach evidence to a user story. The report holds the
+program, date and scope, the pass/fail result against the agreed tolerances, any differences
+beyond tolerance (expected / actual / difference), a pass/fail list per spec, and the Figma frame
+name and node id read from the spec. It does not include the per-element Figma-vs-live value
+table, the "items to confirm with design" or the quick-access steps; add those by hand if the
+story needs them. `design-report/` is gitignored.
+
+```bash
+npm run design:report -- sandoz-tyruko-copay
+npm run design:report -- sandoz-tyruko-copay -- --no-run
+```
+using the results of the last design run. Follow the "Report for a story" structure in
+docs/design-validation.md and save it to design-report/.
+The design spec has to run first, because the report is built from its results:
+"npm run test:sandoz-tyruko-copay:design"
+""
+
+The Figma data is stored locally (and gitignored, the repo is public) under
+`src/programs/<key>/design-validation/baseline/`. Tolerances, the workflow, the report format
+and the stored-data layout are documented in [docs/design-validation.md](docs/design-validation.md).
 
 ### Screenshot framework (visual documentation)
 

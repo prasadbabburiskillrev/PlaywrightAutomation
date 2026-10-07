@@ -1,6 +1,6 @@
-import { test, expect } from '../fixtures';
-import { generatePatientInformation } from '../utils/DataGenerator';
-import { EligibilityAnswers } from '../testdata/types';
+import { test, expect } from '../../fixtures';
+import { generatePatientInformation } from '../../utils/DataGenerator';
+import { EligibilityAnswers } from '../../testdata/types';
 
 const eligibleAnswers: EligibilityAnswers = {
   paysWithCashOrFederalProgram: false,

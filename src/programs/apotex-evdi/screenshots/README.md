@@ -1,7 +1,7 @@
 # Screenshot Framework
 
 Standalone visual-documentation/regression screenshot tooling, separate from
-`src/programs/apotex-evdi/tests/`. It drives the existing
+`src/programs/apotex-evdi/tests/e2e/`. It drives the existing
 `src/programs/apotex-evdi/pages`/`modules` Page Object Model through the Patient and HCP
 enrollment wizards and both roles' "Upload Documents" path at configurable resolutions,
 saving individually-named PNGs incrementally and merging each run into a single ordered
@@ -84,7 +84,7 @@ to watch the browser while it runs.
 ## Known limitation
 
 The HCP path's terminal `Submit` click is a documented, escalated, flaky
-live-app bug (see `src/programs/apotex-evdi/tests/hcp-enrollment.spec.ts`'s
+live-app bug (see `src/programs/apotex-evdi/tests/e2e/hcp-enrollment.e2e.spec.ts`'s
 describe-block comment) with roughly a 1-in-3 to 1-in-4 live pass rate.
 This framework attempts it once per run and skips the `hcp_success_default`
 capture (logging a warning) rather than retrying - re-run `screenshots:*` if

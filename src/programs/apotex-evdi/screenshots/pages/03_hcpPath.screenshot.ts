@@ -84,7 +84,7 @@ export async function captureHcpPath(page: Page, context: RunContext): Promise<v
   await capture(page, context, 'hcp_patientInformation_filled');
 
   // Terminal action for the HCP path. Known, escalated live-app bug (see
-  // hcp-enrollment.spec.ts): this click races the app's own validation and
+  // tests/e2e/hcp-enrollment.e2e.spec.ts): this click races the app's own validation and
   // fails roughly 2-in-3 to 3-in-4 attempts. Per design decision, this
   // framework attempts it once and skips the success capture (with a
   // warning) rather than adding retry complexity here.
@@ -95,7 +95,7 @@ export async function captureHcpPath(page: Page, context: RunContext): Promise<v
     await capture(page, context, 'hcp_success_default');
   } catch (error) {
     console.warn(
-      '[hcp_success_default] Skipped - known flaky HCP terminal-submit bug (see hcp-enrollment.spec.ts) ' +
+      '[hcp_success_default] Skipped - known flaky HCP terminal-submit bug (see tests/e2e/hcp-enrollment.e2e.spec.ts) ' +
         'did not reach /success on this single attempt.',
       error
     );

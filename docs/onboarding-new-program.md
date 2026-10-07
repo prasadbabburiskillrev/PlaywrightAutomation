@@ -89,15 +89,19 @@ When this happens:
 4. **Scaffold `src/programs/<program-key>/`**: `pages/`, `testdata/types.ts`,
    `fixtures/index.ts`, `utils/DataGenerator.ts`, `utils/deviceBrowsers.ts`
    (with its own `PROGRAM_NAME`/`PROGRAM_KEY`/`SPINNER_SELECTOR`),
-   `utils/index.ts`, `config/index.ts`, `tests/`. Port page objects
+   `utils/index.ts`, `config/index.ts`, `tests/e2e/` and `tests/design/`. Port page objects
    near-verbatim wherever live research confirmed identical selectors/
    behavior; rewrite (don't locator-tweak) wherever the structure is
    actually different.
 5. **Wire it into shared config**: add another `dotenv.config(...)` call
-   and a `projects[]` entry in `playwright.config.ts` (the pattern and its
-   own onboarding comment already anticipate this); add
-   `test:<program-key>` to `package.json`.
-6. **Write tests and run them live** — TDD against the real site, not
+   and one `...programProjects('<program-key>', <base url>)` line in
+   `playwright.config.ts` (it creates the `<key>-e2e` and `<key>-design` projects
+   pointing at `tests/e2e` and `tests/design`); add `test:<program-key>`
+   (`--project=<key>-e2e`) and `test:<program-key>:design`
+   (`--project=<key>-design`) to `package.json`. `npm test` and `npm run
+   test:design` pick the new program up automatically through their `*-e2e` /
+   `*-design` project wildcards.
+6. **Write tests and run them live** (e2e specs as `tests/e2e/<name>.e2e.spec.ts`) — TDD against the real site, not
    assumptions. Every fact this guide's worked example used (question order,
    error message text, heading text, field names) was pulled from actually
    running things against the live host, not inferred from visual
@@ -112,10 +116,16 @@ When this happens:
    footer** (or any other popup that might inflate `fullPage` height) before
    assuming an existing program's `capHeightPx` values apply — they're tuned
    from that program's own measured page heights and do not transfer.
-9. **Update `CLAUDE.md`**: Commands section, Screenshot-framework section,
+9. **Set up design validation** (Figma-vs-live checks) when the program has a Figma
+   file: store the mockup data under `design-validation/baseline/` with
+   `npm run design:split` / `design:convert -- <program-key>` and write
+   `tests/design/*.design.spec.ts` per story. The baseline folder is gitignored
+   (public repo). See [design-validation.md](design-validation.md) for the
+   rules, tolerances and report format.
+10. **Update `CLAUDE.md`**: Commands section, Screenshot-framework section,
    and the "Onboarding a new program" paragraph (this file may need edits
    too, if the process itself changed).
-10. **Run the *other* program's full suite** (tests + at least one
+11. **Run the *other* program's full suite** (tests + at least one
     screenshot resolution) before committing, to confirm zero regression —
     shared engine code and renamed/shared npm scripts are exactly the kind
     of change that can silently break a sibling program.

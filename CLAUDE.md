@@ -6,27 +6,56 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 TypeScript + Playwright end-to-end test suites for TrialCard copay enrollment portals
 (Vuetify SPAs on the shared QA host `https://portal-qa.trialcard.com/`): the Apotex
-eVDI portal (`/apotex/evdi/`) and the Summit Ivonescimab portal (`/summit/ivonescimab/`).
-Each also has a separate screenshot/visual-documentation tool that drives the same page
-objects. There is no application source in this repo — this is a test/automation
+eVDI portal (`/apotex/evdi/`), the Summit Ivonescimab portal (`/summit/ivonescimab/`) and the
+Sandoz Tyruko co-pay portal (`/sandoz/tyrukocopay/`). Each also has a separate
+screenshot/visual-documentation tool that drives the same page objects, and a Figma-vs-live
+"design check" layer (see "Three kinds of checks" below). There is no application source in this repo — this is a test/automation
 framework only.
 
 The repo is structured to support more than one similar program (site) side by side —
-see "Multi-program layout" below. Today there are two programs: `apotex-evdi` (full
-Patient + HCP enrollment) and `summit-ivonescimab` (Patient enrollment up to Patient
+see "Multi-program layout" below. Today there are three programs: `apotex-evdi` (full
+Patient + HCP enrollment), `summit-ivonescimab` (Patient enrollment up to Patient
 Information — see
 [docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md](docs/superpowers/specs/2026-09-23-summit-ivonescimab-onboarding-design.md)
-for what's follow-up).
+for what's follow-up) and `sandoz-tyruko-copay` (Patient, HCP and Pharmacy paths plus the
+Patient Transition Program).
+
+## Three kinds of checks
+
+Each program has three separate kinds of checks; keep them apart:
+
+| Kind | Question | Where | Run with |
+| --- | --- | --- | --- |
+| e2e | Does the business flow work? | `tests/e2e/*.e2e.spec.ts` | `npm test` |
+| design | Does the page match its Figma mockup? | `tests/design/*.design.spec.ts` | `npm run test:design` |
+| screenshots | What does each state look like? | `screenshots/` | `npm run screenshots:<key>:<resolution>` |
+
+e2e and design are separate Playwright projects per program (`<key>-e2e`, `<key>-design`,
+built by `programProjects()` in `playwright.config.ts`). `npm test` runs only the e2e
+projects, so slow live-page design checks never run as part of regression. A spec goes in
+`e2e/` if it asserts behaviour and in `design/` if it asserts how a page looks against Figma.
+The design workflow, rules (tolerances, body-only) and report format are in
+[docs/design-validation.md](docs/design-validation.md).
 
 ## Commands
 
+Full list with every option: [docs/commands.md](docs/commands.md).
+
 ```bash
-npm test                              # run every program's Playwright suite
-npm run test:apotex-evdi              # run only the apotex-evdi program's suite
-npm run test:summit-ivonescimab       # run only the summit-ivonescimab program's suite
-npm run test:headed                   # same, with a visible browser
+npm test                              # run every program's e2e suite (design specs excluded)
+npm run test:apotex-evdi              # run only the apotex-evdi program's e2e suite
+npm run test:summit-ivonescimab       # run only the summit-ivonescimab program's e2e suite
+npm run test:sandoz-tyruko-copay      # run only the sandoz-tyruko-copay program's e2e suite
+npm run test:headed                   # every e2e suite, with a visible browser
+npm run test:design                   # every program's Figma-vs-live design specs
+npm run test:<program>:design         # one program's design specs
+npm run design:split -- <program> <raw-file>   # split a saved Figma dump into per-page files
+npm run design:convert -- <program>            # convert split pages to body-only JSON
+npm run design:report -- <program>             # run that program's design specs, write design-report/<program>-design-report.docx
+npm run design:report -- <program> -- --no-run # rebuild the docx from the last saved run (no live run)
+npm run design:report -- <program> --story=<id> # run only specs titled "US-<id>..." and tag the report with that story
 npm run report                        # open the last HTML report (playwright-report/)
-npx playwright test src/programs/apotex-evdi/tests/patient-enrollment.spec.ts   # run a single spec file
+npx playwright test src/programs/apotex-evdi/tests/e2e/patient-enrollment.e2e.spec.ts   # run a single spec file
 npx playwright test -g "routes to the not-eligible page"                        # run tests by title
 ```
 
@@ -78,16 +107,21 @@ add new captures).
 src/
   shared/                        engine code with no program-specific knowledge —
                                   reused by every program, never duplicated per program
+    design-validation/           split-baseline.mjs / convert-baseline.mjs: turn a saved Figma
+                                  dump into per-page, body-only JSON (program key is an argument)
     screenshots-engine/          screenshotHelper.ts (capture/naming/manifest/sequence),
                                   pdfMerger.ts (manifest -> ordered PDF)
   programs/
     apotex-evdi/                 everything specific to this one site
-      pages/  modules/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
+      pages/  modules/  fixtures/  testdata/  utils/  config/  screenshots/
+      tests/e2e/  tests/design/   e2e = business flows, design = Figma-vs-live UI checks
       .env                       APOTEX_EVDI_BASE_URL (program-specific secret/config)
     summit-ivonescimab/          Patient enrollment flow only so far (see
                                   docs/superpowers/specs/2026-09-23-summit-ivonescimab-
                                   onboarding-design.md for what's follow-up)
-      pages/  fixtures/  testdata/  utils/  config/  tests/  screenshots/
+      pages/  fixtures/  testdata/  utils/  config/  screenshots/
+      tests/e2e/  tests/design/
+      design-validation/baseline/   stored Figma data (gitignored, local only)
       .env                       SUMMIT_IVONESCIMAB_BASE_URL
 ```
 
@@ -126,7 +160,7 @@ Full rationale: [docs/superpowers/specs/2026-09-03-multi-program-figma-design-va
   taking a `PortalRole`, since Patient and HCP share the exact same upload page and flow).
 - `fixtures/index.ts` — the custom Playwright `test`, extending base `test` with one
   fixture per page object plus `patientEnrollment`/`hcpEnrollment`/`documentUpload`
-  module fixtures. All specs import `test`/`expect` from `../fixtures`, never from
+  module fixtures. All specs import `test`/`expect` from `../../fixtures` (they sit in `tests/e2e/` or `tests/design/`), never from
   `@playwright/test` directly — this is the standard Playwright fixture pattern (recommended in Playwright's own
   docs), giving a single place to add/change fixtures instead of touching every spec, and
   keeping page-object construction centralized rather than `new`'d inline per test. Page
@@ -195,7 +229,7 @@ since neither file has any program-specific knowledge.
 - The HCP enrollment "completes successfully end to end" flow has a known, escalated,
   flaky live-app defect on its terminal Submit click (~1-in-3 to 1-in-4 live pass rate,
   independent of test data freshness) — see the long comment in
-  [src/programs/apotex-evdi/tests/hcp-enrollment.spec.ts](src/programs/apotex-evdi/tests/hcp-enrollment.spec.ts)
+  [src/programs/apotex-evdi/tests/e2e/hcp-enrollment.e2e.spec.ts](src/programs/apotex-evdi/tests/e2e/hcp-enrollment.e2e.spec.ts)
   before touching retries/timeouts on that describe block. It's a real app bug, not a
   test flake to engineer around; the suite uses `test.describe.configure({ retries: 5 })`
   to absorb it as a hard pass/fail gate. The screenshot framework instead attempts it

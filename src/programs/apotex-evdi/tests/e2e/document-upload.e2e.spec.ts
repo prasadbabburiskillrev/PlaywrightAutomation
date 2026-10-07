@@ -1,6 +1,6 @@
-import { test, expect } from '../fixtures';
-import { PortalRole } from '../testdata/types';
-import { SAMPLE_PDF, SAMPLE_PNG, oversizedFile, unsupportedTypeFile } from '../testdata/uploadFiles';
+import { test, expect } from '../../fixtures';
+import { PortalRole } from '../../testdata/types';
+import { SAMPLE_PDF, SAMPLE_PNG, oversizedFile, unsupportedTypeFile } from '../../testdata/uploadFiles';
 
 // Patient and HCP "Upload Documents" share one page and one flow (verified
 // live), so every case runs once per role to prove both landing-page entry

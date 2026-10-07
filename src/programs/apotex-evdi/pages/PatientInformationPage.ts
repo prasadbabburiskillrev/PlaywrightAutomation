@@ -90,7 +90,7 @@ export class PatientInformationPage {
     // Explicit wait (experiment, not a blanket sleep): the HCP path's live,
     // reproducible `/error` race correlates with a guest-session token
     // refresh (`Authentication/guest`) firing around Submit time - see
-    // hcp-enrollment.spec.ts's describe-block comment. Give any in-flight
+    // hcp-enrollment.e2e.spec.ts's describe-block comment. Give any in-flight
     // network activity a bounded window to settle before the terminal
     // Submit click. Bounded + swallowed so it never hangs or fails on this
     // SPA's long-lived connections when nothing is in flight.
